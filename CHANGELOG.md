@@ -5,6 +5,16 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.16
+- Bilder-Springen beim Schließen im SCROLL-Modus behoben: Beim Auffrischen wird
+  die Sammlung jetzt nur noch benachrichtigt (notifyAppWidgetViewDataChanged)
+  statt bei jeder Änderung den RemoteAdapter neu zu setzen. Vorher baute der
+  Launcher die ganze Sammlung neu auf, wodurch die Kachelbilder mehrfach an
+  verschobene Kacheln sprangen. (0.15 hatte nur die feste Darstellung betroffen.)
+- Gespeicherte Kachelbilder mit höherer Auflösung (400 statt 260 px längste
+  Kante) – schärfere große Kacheln, vor allem in EdgeTabs „Widget 2“. Das
+  Home-Widget skaliert daraus je nach Kachelzahl passend herunter.
+
 ## 0.15
 - Kein „Springen“ der Kachelbilder mehr beim Schließen (feste Darstellung): Die
   Bilder werden jetzt als kleine Bitmaps direkt eingebettet statt per

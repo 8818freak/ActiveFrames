@@ -90,9 +90,11 @@ final class ImageStore {
     static void putImage(Context c, String pkg, Bitmap bmp) {
         if (bmp == null) return;
         try (FileOutputStream out = new FileOutputStream(file(c, pkg))) {
-            // moderat herunterskalieren - grosse Bitmaps sprengen sonst die
-            // Binder-Transaktion, mit der RemoteViews ans Widget wandern.
-            Bitmap scaled = scaleDown(bmp, 260);
+            // Quellbild mit etwas höherer Auflösung ablegen (längste Kante),
+            // damit große Kacheln - vor allem die native EdgeTab-Karte
+            // (Widget 2) - schärfer sind. Das Home-Widget skaliert daraus je
+            // nach Kachelzahl passend klein herunter (Binder-Grenze).
+            Bitmap scaled = scaleDown(bmp, 400);
             scaled.compress(Bitmap.CompressFormat.PNG, 90, out);
         } catch (Throwable ignored) {}
     }
