@@ -18,6 +18,7 @@ public final class Settings {
     private static final String K_MAX_TILES = "max_tiles";
     private static final String K_SHOW_LABELS = "show_labels";
     private static final String K_AUTO_HEIGHT = "auto_height"; // Kachelhoehe = Bildschirmformat
+    private static final String K_SCROLL = "scroll"; // scrollbare Sammlung statt fester Raster
     private static final String K_BIG_ROWS = "big_rows"; // wie viele obere Reihen in voller Hoehe
     private static final String K_SHORT_PCT = "short_row_pct"; // Hoehe der folgenden Reihen in %
     private static final String K_PINNED = "pinned"; // Reihenfolge zaehlt -> \n-getrennt
@@ -55,6 +56,12 @@ public final class Settings {
      *  Bildschirmformat). Wenn aus, gilt die manuelle Hoehe oben. */
     public static boolean autoHeight(Context c) { return p(c).getBoolean(K_AUTO_HEIGHT, true); }
     public static void setAutoHeight(Context c, boolean on) { p(c).edit().putBoolean(K_AUTO_HEIGHT, on).apply(); }
+
+    /** Scrollbare Sammlung (mehr Kacheln als sichtbar, aber auf ALTEN Launchern
+     *  fehlerhaftes Kachel-Recycling) statt des festen, immer korrekten Rasters
+     *  mit variablen Reihenhoehen. Standard AUS (sicher). */
+    public static boolean scroll(Context c) { return p(c).getBoolean(K_SCROLL, false); }
+    public static void setScroll(Context c, boolean on) { p(c).edit().putBoolean(K_SCROLL, on).apply(); }
 
     public static int maxTiles(Context c) { return p(c).getInt(K_MAX_TILES, 12); }
     public static void setMaxTiles(Context c, int n) { p(c).edit().putInt(K_MAX_TILES, clamp(n, 4, 100)).apply(); }

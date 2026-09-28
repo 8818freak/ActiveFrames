@@ -5,6 +5,15 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.10
+- Das Home-Screen-Widget heißt jetzt „Widget 1" (eine native, scrollbare
+  Active-Frames-Karte für EdgeTab als „Widget 2" folgt).
+- Neuer Scroll-Schalter (Einstellungen): AN = scrollbar (mehr Kacheln als
+  sichtbar), AUS = die feste, immer korrekte Darstellung mit variablen
+  Reihenhöhen. Mit Warnhinweis: Auf älteren Launchern (z. B. BlackBerry
+  Launcher) kann die scrollbare Variante Bild und Name vertauschen - dann
+  einfach ausschalten.
+
 ## 0.9
 - Falscher „Neues"-Stern behoben (trat u.a. beim Hub-Posteingang ohne Grund
   auf): Der Stern erscheint jetzt nur noch bei einer echten, wegwischbaren

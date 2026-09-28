@@ -30,7 +30,9 @@
     <string name="acc_on">✓ ein (echte App-Fotos)</string>
     <string name="acc_off">✗ aus (optional)</string>
 
-    <string name="cfg_title">Active Frames – Kacheln</string>
+    <string name="cfg_title">Active Frames – Widget 1</string>
+    <string name="cfg_scroll">  Scrollen (mehr Kacheln als sichtbar)</string>
+    <string name="cfg_scroll_warn">Achtung: Auf älteren Launchern (z. B. dem BlackBerry Launcher) können dabei Bild und Name der Kacheln vertauscht werden. Tritt das auf, Scrollen wieder ausschalten – dann gilt die feste Darstellung mit variablen Reihenhöhen (immer korrekt, aber nicht scrollbar).</string>
     <string name="cfg_autoheight">  Kachelformat automatisch an Bildschirm anpassen</string>
     <string name="cfg_columns">Spalten</string>
     <string name="cfg_height">Kachelhöhe (dp) – kleiner = mehr sichtbar (nur wenn nicht automatisch)</string>

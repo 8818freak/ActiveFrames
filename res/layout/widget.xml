@@ -4,13 +4,26 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent">
 
-    <!-- Zeilen werden zur Laufzeit hier eingehängt (kein RemoteViews-
-         Collection-Adapter -> kein Recycling, keine vertauschten Kacheln). -->
+    <!-- Feste (korrekte) Variante: Zeilen zur Laufzeit hier eingehängt (kein
+         Adapter -> kein Recycling, keine vertauschten Kacheln, variable Höhen). -->
     <LinearLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" />
+
+    <!-- Scrollbare Variante (Sammlung): mehr Kacheln als sichtbar, aber auf
+         alten Launchern fehlerhaftes Recycling. Nur sichtbar, wenn Scrollen an. -->
+    <GridView
+        android:id="@+id/grid"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:numColumns="2"
+        android:horizontalSpacing="14dp"
+        android:verticalSpacing="14dp"
+        android:stretchMode="columnWidth"
+        android:scrollbars="none"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/empty"

@@ -80,15 +80,41 @@ public class FramesWidget extends AppWidgetProvider {
 
     static void updateWidget(Context ctx, AppWidgetManager mgr, int id) {
         RemoteViews root = new RemoteViews(ctx.getPackageName(), R.layout.widget);
-        root.removeAllViews(R.id.container);
 
         List<String> list = orderedPkgs(ctx);
         if (list.isEmpty()) {
             root.setViewVisibility(R.id.empty, View.VISIBLE);
+            root.setViewVisibility(R.id.grid, View.GONE);
+            root.setViewVisibility(R.id.container, View.GONE);
             mgr.updateAppWidget(id, root);
             return;
         }
         root.setViewVisibility(R.id.empty, View.GONE);
+
+        // Scrollbare Variante (Sammlung) - mehr Kacheln als sichtbar, auf alten
+        // Launchern aber fehlerhaftes Recycling (siehe Warnhinweis in den
+        // Einstellungen). Sonst die feste, immer korrekte Raster-Variante.
+        if (Settings.scroll(ctx)) {
+            root.setViewVisibility(R.id.container, View.GONE);
+            root.setViewVisibility(R.id.grid, View.VISIBLE);
+            root.setInt(R.id.grid, "setNumColumns", Settings.columns(ctx));
+            Intent svc = new Intent(ctx, FramesWidgetService.class);
+            svc.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
+            svc.setData(Uri.parse(svc.toUri(Intent.URI_INTENT_SCHEME)));
+            root.setRemoteAdapter(R.id.grid, svc);
+            root.setEmptyView(R.id.grid, R.id.empty);
+            Intent click = new Intent(ctx, FramesWidget.class).setAction(ACTION_LAUNCH);
+            PendingIntent tmpl = PendingIntent.getBroadcast(ctx, 0, click,
+                    PendingIntent.FLAG_MUTABLE | PendingIntent.FLAG_UPDATE_CURRENT);
+            root.setPendingIntentTemplate(R.id.grid, tmpl);
+            mgr.updateAppWidget(id, root);
+            mgr.notifyAppWidgetViewDataChanged(id, R.id.grid);
+            return;
+        }
+
+        root.setViewVisibility(R.id.grid, View.GONE);
+        root.setViewVisibility(R.id.container, View.VISIBLE);
+        root.removeAllViews(R.id.container);
 
         int cols = Settings.columns(ctx);
         int fullH = tileHeightDp(ctx, mgr, id);
@@ -159,7 +185,7 @@ public class FramesWidget extends AppWidgetProvider {
     }
 
     /** Angepinnte Schnellstart-Apps zuerst, dann MRU, ohne verworfene, gekappt. */
-    private static List<String> orderedPkgs(Context ctx) {
+    static List<String> orderedPkgs(Context ctx) {
         int max = Settings.maxTiles(ctx);
         Set<String> dismissed = ImageStore.dismissed(ctx);
         List<String> out = new ArrayList<>();
@@ -177,7 +203,7 @@ public class FramesWidget extends AppWidgetProvider {
 
     /** Kachelhoehe in dp. Automatik: aus Widget-Breite, Spaltenzahl und
      *  Bildschirm-Seitenverhaeltnis. Sonst der manuell eingestellte Wert. */
-    private static int tileHeightDp(Context ctx, AppWidgetManager mgr, int id) {
+    static int tileHeightDp(Context ctx, AppWidgetManager mgr, int id) {
         if (!Settings.autoHeight(ctx)) return Settings.tileHeightDp(ctx);
         try {
             Bundle opt = mgr.getAppWidgetOptions(id);
@@ -202,7 +228,7 @@ public class FramesWidget extends AppWidgetProvider {
         }
     }
 
-    private static String launcherPkg(Context ctx) {
+    static String launcherPkg(Context ctx) {
         try {
             Intent home = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME);
             android.content.pm.ResolveInfo ri = ctx.getPackageManager()

@@ -30,7 +30,9 @@
     <string name="acc_on">✓ on (real app photos)</string>
     <string name="acc_off">✗ off (optional)</string>
 
-    <string name="cfg_title">Active Frames – Tiles</string>
+    <string name="cfg_title">Active Frames – Widget 1</string>
+    <string name="cfg_scroll">  Scrolling (more tiles than fit)</string>
+    <string name="cfg_scroll_warn">Note: on older launchers (e.g. the BlackBerry Launcher) tile image and name may get swapped. If that happens, turn scrolling off again – then the fixed layout with variable row heights applies (always correct, but not scrollable).</string>
     <string name="cfg_autoheight">  Match tile format to the screen automatically</string>
     <string name="cfg_columns">Columns</string>
     <string name="cfg_height">Tile height (dp) – smaller = more visible (only when not automatic)</string>
