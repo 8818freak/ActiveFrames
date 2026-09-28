@@ -120,7 +120,7 @@ public class FramesWidget extends AppWidgetProvider {
         int fullH = tileHeightDp(ctx, mgr, id);
         int shortH = Math.max(48, Math.round(fullH * Settings.shortRowPercent(ctx) / 100f));
         int bigRows = Settings.bigRows(ctx);
-        String lp = launcherPkg(ctx);
+        int imgEdge = imageEdge(list.size());
 
         int rows = (list.size() + cols - 1) / cols;
         for (int r = 0; r < rows; r++) {
@@ -133,7 +133,7 @@ public class FramesWidget extends AppWidgetProvider {
             for (int c = 0; c < cols; c++) {
                 int idx = r * cols + c;
                 if (idx >= list.size()) break;
-                row.addView(R.id.row_lin, buildTile(ctx, list.get(idx), lp));
+                row.addView(R.id.row_lin, buildTile(ctx, list.get(idx), imgEdge));
                 added++;
             }
             for (int c = added; c < cols; c++) {
@@ -144,7 +144,7 @@ public class FramesWidget extends AppWidgetProvider {
         mgr.updateAppWidget(id, root);
     }
 
-    private static RemoteViews buildTile(Context ctx, String pkg, String launcherPkg) {
+    private static RemoteViews buildTile(Context ctx, String pkg, int maxEdge) {
         RemoteViews t = new RemoteViews(ctx.getPackageName(), R.layout.tile);
         String label = AppInfoCache.label(ctx, pkg);
 
@@ -152,40 +152,42 @@ public class FramesWidget extends AppWidgetProvider {
         if (small != null) t.setImageViewBitmap(R.id.tile_icon, small);
         t.setTextViewText(R.id.tile_label, label);
 
-        if (ImageStore.hasImage(ctx, pkg)) {
-            Uri uri = ImageStore.uriFor(ctx, pkg);
-            if (launcherPkg != null) {
-                try { ctx.grantUriPermission(launcherPkg, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION); }
-                catch (Throwable ignored) {}
-            }
-            t.setImageViewUri(R.id.tile_image, uri);
+        // Kachelbild als kleines Bitmap DIREKT einbetten (nicht per content://-URI).
+        // Sonst laedt der Launcher beim Neuaufbau des Widgets (z.B. nach dem
+        // Schliessen einer Kachel) jede URI einzeln asynchron nach - die Bilder
+        // "springen" dann kurz an die (durch das Wegfallen einer Kachel)
+        // verschobenen Nachbarn, teils mehrfach hintereinander. Direkt
+        // eingebettete Bitmaps sind sofort da -> kein Nachladen, kein Springen
+        // (genau darum springt auch BlackBerrys Hub-Widget nicht). Die Groesse
+        // ist an die Kachelzahl gekoppelt (imageEdge), damit die gesamte, in
+        // EINER Transaktion uebertragene RemoteViews unter der ~1-MB-Binder-
+        // Grenze bleibt. Kein Kachelbild -> das App-Logo kachelgross.
+        Bitmap image = ImageStore.getImageScaled(ctx, pkg, maxEdge);
+        if (image == null) {
+            image = AppInfoCache.logoTile(ctx, pkg, Math.round(maxEdge * 0.75f), maxEdge);
+        }
+        if (image != null) {
+            t.setImageViewBitmap(R.id.tile_image, image);
             t.setViewVisibility(R.id.tile_image, View.VISIBLE);
             t.setViewVisibility(R.id.tile_title, View.GONE);
         } else {
-            // Kein Kachelbild -> statt des App-Namens das Logo kachelgross
-            // (mittig, unverzerrt, unbeschnitten) einblenden. Per URI, damit
-            // die eine grosse RemoteViews des festen Layouts den Binder nicht
-            // sprengt (wie bei den echten Bildern).
-            Uri logoUri = ImageStore.logoUriFor(ctx, pkg);
-            if (logoUri != null) {
-                if (launcherPkg != null) {
-                    try { ctx.grantUriPermission(launcherPkg, logoUri, Intent.FLAG_GRANT_READ_URI_PERMISSION); }
-                    catch (Throwable ignored) {}
-                }
-                t.setImageViewUri(R.id.tile_image, logoUri);
-                t.setViewVisibility(R.id.tile_image, View.VISIBLE);
-                t.setViewVisibility(R.id.tile_title, View.GONE);
-            } else {
-                t.setViewVisibility(R.id.tile_image, View.GONE);
-                t.setTextViewText(R.id.tile_title, label);
-                t.setViewVisibility(R.id.tile_title, View.VISIBLE);
-            }
+            t.setViewVisibility(R.id.tile_image, View.GONE);
+            t.setTextViewText(R.id.tile_title, label);
+            t.setViewVisibility(R.id.tile_title, View.VISIBLE);
         }
         t.setViewVisibility(R.id.tile_star, ImageStore.isUnread(ctx, pkg) ? View.VISIBLE : View.GONE);
 
         t.setOnClickPendingIntent(R.id.tile_card, pi(ctx, pkg, false));
         t.setOnClickPendingIntent(R.id.tile_close, pi(ctx, pkg, true));
         return t;
+    }
+
+    /** Bild-Kantenlaenge (px) je Kachel, an die Kachelzahl gekoppelt: bei mehr
+     *  Kacheln kleinere Bilder, damit die gesamte, direkt eingebettete
+     *  RemoteViews deutlich unter der ~1-MB-Binder-Grenze bleibt. */
+    private static int imageEdge(int n) {
+        int e = (int) Math.sqrt(200000.0 / Math.max(1, n));
+        return Math.max(48, Math.min(176, e));
     }
 
     private static PendingIntent pi(Context ctx, String pkg, boolean dismiss) {

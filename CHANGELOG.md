@@ -5,6 +5,15 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.15
+- Kein „Springen“ der Kachelbilder mehr beim Schließen (feste Darstellung): Die
+  Bilder werden jetzt als kleine Bitmaps direkt eingebettet statt per
+  content://-URI übertragen. Vorher lud der Launcher beim Neuaufbau des Widgets
+  jede URI einzeln asynchron nach, wodurch Bilder kurz (bis zu mehrmals) an die
+  falsche Kachel sprangen – genau darum springt BlackBerrys Hub-Widget nicht.
+  Die Bildgröße ist an die Kachelzahl gekoppelt, damit die Übertragung klein
+  bleibt.
+
 ## 0.14
 - Der rote Stern erlischt jetzt auch, wenn die zugehörige Benachrichtigung aus
   dem System entfernt (weggewischt/gelöscht) wird – nicht mehr nur beim Öffnen
