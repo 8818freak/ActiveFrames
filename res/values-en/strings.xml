@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Active Frames</string>
+    <string name="config_title">Active Frames – Settings</string>
+    <string name="widget_description">Active tiles: your recently used apps showing the content of their latest notification, like BlackBerry Active Frames.</string>
+    <string name="acc_desc">Optional: so the tiles can show a real image of an app\'s last state (like BlackBerry Active Frames), Active Frames takes a screenshot of an app when you open it. The images stay only on the device (app-private storage) and are never sent anywhere. Without this, tiles show the latest notification image or the app icon.</string>
+    <string name="empty_hint">No tiles yet – grant usage access in Active Frames.</string>
+
+    <string name="main_intro">Active tiles of your recently used apps – top left is the most recently opened, like BlackBerry OS10. Red star when there is something new, tile image from the latest notification.</string>
+    <string name="sec_order">1. Tile order</string>
+    <string name="order_desc">Needs usage access (which app was in front most recently).</string>
+    <string name="grant_usage">Grant usage access</string>
+    <string name="sec_star">2. Star &amp; tile image</string>
+    <string name="star_desc">Needs notification access (latest image / “new” per app).</string>
+    <string name="grant_notif">Grant notification access</string>
+    <string name="sec_photos">3. Real app photos (optional)</string>
+    <string name="photos_desc">Without this, tiles show the latest notification image or the app icon. With accessibility enabled, Active Frames takes a photo of an app\'s state when you open it (true Active Frames look). Images stay on the device only; secure apps (banking) stay black.</string>
+    <string name="grant_acc">Accessibility on/off</string>
+    <string name="sec_widget">4. Widget &amp; settings</string>
+    <string name="main_widget_desc">Place the widget on your home screen (long-press an empty spot → Widgets → Active Frames) and resize it freely. Columns, tile format and quick-launch apps are in the gear.</string>
+    <string name="open_settings_btn">Open tile settings</string>
+
+    <string name="changelog_title">Changelog</string>
+    <string name="changelog_show">Show changelog</string>
+    <string name="changelog_hide">Hide changelog</string>
+    <string name="changelog_unavailable">Changelog could not be loaded.</string>
+
+    <string name="status_granted">✓ granted</string>
+    <string name="status_denied">✗ not granted yet</string>
+    <string name="acc_on">✓ on (real app photos)</string>
+    <string name="acc_off">✗ off (optional)</string>
+
+    <string name="cfg_title">Active Frames – Tiles</string>
+    <string name="cfg_autoheight">  Match tile format to the screen automatically</string>
+    <string name="cfg_columns">Columns</string>
+    <string name="cfg_height">Tile height (dp) – smaller = more visible (only when not automatic)</string>
+    <string name="cfg_count">Number of tiles</string>
+    <string name="cfg_bigrows">Large rows on top (rows after are smaller)</string>
+    <string name="cfg_shortpct">Height of the smaller rows (%)</string>
+    <string name="cfg_pick_pinned">Choose quick-launch apps…</string>
+    <string name="cfg_hint">The widget is freely resizable – long-press it on the home screen and drag the edges. Tile image = content of the latest notification (photo/cover), otherwise the app icon.</string>
+    <string name="cfg_done">Done</string>
+    <string name="cfg_close">Close</string>
+    <string name="pin_title">Quick-launch apps</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+</resources>

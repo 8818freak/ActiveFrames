@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dunkles Grundthema ohne Actionbar - die Bildschirme malen ihre Inhalte
+         selbst (kein Layout-XML), passend zum Rest des App-Verbunds. -->
+    <style name="AppTheme" parent="@android:style/Theme.Material.NoActionBar" />
+</resources>

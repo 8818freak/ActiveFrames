@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Active Frames</string>
+    <string name="config_title">Active Frames – Einstellungen</string>
+    <string name="widget_description">Aktive Kacheln: zuletzt benutzte Apps mit dem Inhalt der letzten Benachrichtigung, wie BlackBerrys Active Frames.</string>
+    <string name="acc_desc">Optional: Damit die Kacheln ein echtes Bild des zuletzt angezeigten App-Zustands zeigen können (wie BlackBerrys Active Frames), macht Active Frames beim Öffnen einer App ein Bildschirmfoto von ihr. Die Bilder bleiben ausschließlich auf dem Gerät (app-interner Speicher) und werden nirgendwo gesendet. Ohne diese Freischaltung zeigen die Kacheln das Bild der letzten Benachrichtigung bzw. das App-Symbol.</string>
+    <string name="empty_hint">Noch keine Kacheln – in Active Frames Nutzungszugriff erlauben.</string>
+
+    <string name="main_intro">Aktive Kacheln der zuletzt benutzten Apps – oben links die zuletzt geöffnete, wie bei BlackBerry OS10. Roter Stern bei etwas Neuem, Kachelbild aus der letzten Benachrichtigung.</string>
+    <string name="sec_order">1. Reihenfolge der Kacheln</string>
+    <string name="order_desc">Braucht den Nutzungsdatenzugriff (welche App zuletzt vorne war).</string>
+    <string name="grant_usage">Nutzungszugriff erlauben</string>
+    <string name="sec_star">2. Stern &amp; Kachelbild</string>
+    <string name="star_desc">Braucht den Benachrichtigungszugriff (letztes Bild/„Neues“ je App).</string>
+    <string name="grant_notif">Benachrichtigungszugriff erlauben</string>
+    <string name="sec_photos">3. Echte App-Fotos (optional)</string>
+    <string name="photos_desc">Ohne dies zeigen die Kacheln das Bild der letzten Benachrichtigung bzw. das App-Symbol. Mit der Bedienungshilfe macht Active Frames beim Öffnen einer App ein Foto ihres Zustands (echte Active-Frames-Optik). Die Bilder bleiben nur auf dem Gerät; sichere Apps (Banking) bleiben schwarz.</string>
+    <string name="grant_acc">Bedienungshilfe ein/aus</string>
+    <string name="sec_widget">4. Widget &amp; Einstellungen</string>
+    <string name="main_widget_desc">Widget auf den Startbildschirm legen (lange auf eine freie Stelle tippen → Widgets → Active Frames) und frei skalieren. Spaltenzahl, Kachelformat und Schnellstart-Apps im Zahnrad.</string>
+    <string name="open_settings_btn">Kachel-Einstellungen öffnen</string>
+
+    <string name="changelog_title">Änderungsprotokoll</string>
+    <string name="changelog_show">Änderungsprotokoll anzeigen</string>
+    <string name="changelog_hide">Änderungsprotokoll ausblenden</string>
+    <string name="changelog_unavailable">Änderungsprotokoll konnte nicht geladen werden.</string>
+
+    <string name="status_granted">✓ erlaubt</string>
+    <string name="status_denied">✗ noch nicht erlaubt</string>
+    <string name="acc_on">✓ ein (echte App-Fotos)</string>
+    <string name="acc_off">✗ aus (optional)</string>
+
+    <string name="cfg_title">Active Frames – Kacheln</string>
+    <string name="cfg_autoheight">  Kachelformat automatisch an Bildschirm anpassen</string>
+    <string name="cfg_columns">Spalten</string>
+    <string name="cfg_height">Kachelhöhe (dp) – kleiner = mehr sichtbar (nur wenn nicht automatisch)</string>
+    <string name="cfg_count">Anzahl Kacheln</string>
+    <string name="cfg_bigrows">Große Reihen oben (Reihen danach kleiner)</string>
+    <string name="cfg_shortpct">Höhe der kleineren Reihen (%)</string>
+    <string name="cfg_pick_pinned">Schnellstart-Apps wählen…</string>
+    <string name="cfg_hint">Das Widget ist frei skalierbar – halte es auf dem Startbildschirm gedrückt und zieh an den Rändern. Kachelbild = Inhalt der letzten Benachrichtigung (Foto/Cover), sonst das App-Symbol.</string>
+    <string name="cfg_done">Fertig</string>
+    <string name="cfg_close">Schließen</string>
+    <string name="pin_title">Schnellstart-Apps</string>
+    <string name="save">Speichern</string>
+    <string name="cancel">Abbrechen</string>
+</resources>

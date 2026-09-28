@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="de.herbers.activeframes"
+    android:versionCode="9"
+    android:versionName="0.9">
+
+    <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="34" />
+
+    <!-- Zuletzt benutzte Apps (MRU-Reihenfolge der Kacheln). Kein normaler
+         Laufzeit-Dialog, sondern ein eigener System-Bildschirm ("Nutzungsdaten-
+         zugriff"), den der Nutzer einmal freischaltet. -->
+    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+
+    <!-- Sichtbarkeit startbarer Apps (Android 11+): sonst lieferte der
+         PackageManager weder Symbol/Name noch einen Start-Intent fremder Apps. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@drawable/ic_launcher"
+        android:theme="@style/AppTheme"
+        android:allowBackup="true">
+
+        <!-- Startbildschirm: Berechtigungen erteilen, Widget erklaeren -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Einstellungen + Widget-Konfiguration (Raster, Kachelformat, ...) -->
+        <activity
+            android:name=".ConfigActivity"
+            android:exported="true"
+            android:label="@string/config_title">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <!-- Das Kachel-Widget selbst -->
+        <receiver
+            android:name=".FramesWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info" />
+        </receiver>
+
+        <!-- Liefert Kachelbilder per content:// ans Widget (keine grossen
+             Bitmaps durch die begrenzte RemoteViews-Uebertragung) -->
+        <provider
+            android:name=".FrameImageProvider"
+            android:authorities="de.herbers.activeframes.frames"
+            android:exported="false"
+            android:grantUriPermissions="true" />
+
+        <!-- Faengt Benachrichtigungen ab: roter Stern + letztes Bild je App -->
+        <service
+            android:name=".FramesNotificationListener"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
+
+        <!-- Optional: echtes App-Foto per takeScreenshot (nur wenn eingeschaltet) -->
+        <service
+            android:name=".FramesAccessibilityService"
+            android:exported="false"
+            android:label="@string/app_name"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_config" />
+        </service>
+    </application>
+</manifest>
