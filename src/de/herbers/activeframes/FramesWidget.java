@@ -69,33 +69,20 @@ public class FramesWidget extends AppWidgetProvider {
         }
     }
 
-    /** Nur die DATEN auffrischen (nach Nutzung: geöffnet/geschlossen/neue
-     *  Benachrichtigung). WICHTIG im Scroll-Modus: NICHT updateAppWidget mit
-     *  setRemoteAdapter aufrufen - das ließe den Launcher die ganze Sammlung
-     *  verwerfen und neu aufbauen, wobei die Kachelbilder mehrfach an
-     *  verschobene Kacheln "springen". Stattdessen nur
-     *  notifyAppWidgetViewDataChanged: die Sammlung lädt ihre Daten neu, ohne
-     *  die Ansicht komplett wegzuwerfen. Im festen Modus (keine Sammlung) ist
-     *  der normale Neuaufbau richtig. */
+    /** Alle Widget-Instanzen auffrischen. Es wird bewusst der vollständige
+     *  updateWidget-Weg genommen (auch im Scroll-Modus): Der BlackBerry Launcher
+     *  reagiert nur darauf, das schonendere notifyAppWidgetViewDataChanged
+     *  allein aktualisiert die Sammlung dort NICHT (dann ließ sich z.B. eine
+     *  Kachel nicht mehr per ✕ schließen). Preis im Scroll-Modus: der Launcher
+     *  baut die Sammlung neu auf (kurzes Bild-"Springen") - eine Grenze dieses
+     *  Launchers; ruckelfrei sind der feste Modus und EdgeTabs Widget 2. */
     static void refreshData(Context ctx) {
-        AppWidgetManager mgr = AppWidgetManager.getInstance(ctx);
-        int[] ids = mgr.getAppWidgetIds(new ComponentName(ctx, FramesWidget.class));
-        if (ids == null) return;
-        boolean scroll = Settings.scroll(ctx);
-        for (int id : ids) {
-            if (scroll) mgr.notifyAppWidgetViewDataChanged(id, R.id.grid);
-            else updateWidget(ctx, mgr, id);
-        }
-    }
-
-    /** Vollständiger Neuaufbau (Adapter/Spalten/Modus) - nach
-     *  Einstellungsänderungen nötig, nicht bei jeder Datenauffrischung. */
-    static void rebuildAll(Context ctx) {
         AppWidgetManager mgr = AppWidgetManager.getInstance(ctx);
         int[] ids = mgr.getAppWidgetIds(new ComponentName(ctx, FramesWidget.class));
         if (ids == null) return;
         for (int id : ids) updateWidget(ctx, mgr, id);
     }
+    static void rebuildAll(Context ctx) { refreshData(ctx); }
 
     static void updateWidget(Context ctx, AppWidgetManager mgr, int id) {
         RemoteViews root = new RemoteViews(ctx.getPackageName(), R.layout.widget);

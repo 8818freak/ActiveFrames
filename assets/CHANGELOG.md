@@ -5,6 +5,16 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.17
+- Rücknahme der 0.16-Auffrischungsänderung: Kacheln ließen sich damit nicht mehr
+  per ✕ schließen. Grund: Der BlackBerry Launcher aktualisiert eine Sammlung nur
+  über den vollständigen updateAppWidget-Weg, nicht über das schonende
+  notifyAppWidgetViewDataChanged. Das Schließen (und das Aktualisieren von
+  Stern/Bild) funktioniert damit wieder. Kehrseite im Scroll-Modus: der Launcher
+  baut die Sammlung dabei neu auf (kurzes Bild-„Springen“) – eine Grenze dieses
+  Launchers. Ruckelfrei bleiben der feste Modus und EdgeTabs „Widget 2“.
+- Die höhere Bildauflösung (400 px) aus 0.16 bleibt erhalten.
+
 ## 0.16
 - Bilder-Springen beim Schließen im SCROLL-Modus behoben: Beim Auffrischen wird
   die Sammlung jetzt nur noch benachrichtigt (notifyAppWidgetViewDataChanged)
