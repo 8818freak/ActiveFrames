@@ -56,6 +56,7 @@ public class FramesWidget extends AppWidgetProvider {
             }
             ImageStore.clearUnread(ctx, pkg);
             ImageStore.clearDismissed(ctx, pkg);
+            Settings.setLastOpened(ctx, pkg);
             try {
                 Intent launch = ctx.getPackageManager().getLaunchIntentForPackage(pkg);
                 if (launch != null) {
@@ -252,6 +253,17 @@ public class FramesWidget extends AppWidgetProvider {
         for (String p : Settings.pinned(ctx)) {
             if (!out.contains(p) && !dismissed.contains(p)
                     && ctx.getPackageManager().getLaunchIntentForPackage(p) != null) out.add(p);
+        }
+        // Gerade geoeffnete App SOFORT vorne (nach den angepinnten) - der
+        // UsageStatsManager verbucht das In-den-Vordergrund-Kommen erst mit ein
+        // paar Sekunden Verzoegerung. Ohne das rendert der volle Neuaufbau, der
+        // im schonenden/Hybrid-Modus GENAU beim Oeffnen laeuft, noch die alte
+        // Reihenfolge - und die bleibt dort haengen, weil die nachfolgenden
+        // schonenden Auffrischungen auf dem BlackBerry Launcher nicht umsortieren.
+        String justOpened = Settings.lastOpened(ctx);
+        if (justOpened != null && !out.contains(justOpened) && !dismissed.contains(justOpened)
+                && ctx.getPackageManager().getLaunchIntentForPackage(justOpened) != null) {
+            out.add(justOpened);
         }
         for (String p : UsageProvider.recentPackages(ctx, max * 2 + 4)) {
             if (out.size() >= max) break;

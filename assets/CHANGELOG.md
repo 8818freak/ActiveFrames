@@ -5,6 +5,28 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.22
+- Sortierung nach Öffnungsreihenfolge korrigiert: Die gerade geöffnete App
+  (per Kachel, aus dem Launcher oder aus der EdgeTab-Karte) steht jetzt sofort
+  oben links – unabhängig davon, wie schnell der UsageStatsManager das
+  In-den-Vordergrund-Kommen verbucht. Der hinkt ein paar Sekunden nach; im
+  schonenden/Hybrid-Modus, wo der volle (einzig umsortierende) Neuaufbau genau
+  beim Öffnen läuft, rendert der Neuaufbau sonst noch die alte Reihenfolge und
+  die bleibt hängen (Ursache dafür, dass die Kacheln zuletzt nicht mehr korrekt
+  nach Öffnungsreihenfolge sortiert waren). Die gerade geöffnete App wird jetzt
+  für kurze Zeit vorrangig vorne einsortiert, danach übernimmt wieder der
+  UsageStatsManager (der bis dahin nachgezogen hat).
+
+## 0.21
+- Hybrid-Modus deckt jetzt auch das Öffnen ab: Der Zusatzschalter heißt „Bei
+  Aktionen voll auffrischen (Öffnen/Schließen)“ und lässt neben dem Schließen
+  auch das Öffnen einer Kachel bzw. das Öffnen einer App aus dem Launcher den
+  vollen, zuverlässigen Weg nehmen. So übernimmt der BlackBerry Launcher beim
+  Öffnen wieder die neue Kachel-Reihenfolge (zuvor blieb sie im schonenden
+  Modus stehen). Beim Öffnen ist der volle Weg unsichtbar, weil die geöffnete
+  App den Startbildschirm gerade verdeckt. Scrollen, eintreffende
+  Benachrichtigungen und das Nachschärfen der Bilder bleiben schonend (flüssig).
+
 ## 0.20
 - Dritter Auffrisch-Modus (Hybrid) als Zusatzschalter „Beim Schließen voll
   auffrischen“ unter „Schonend auffrischen“: Öffnen/Scrollen/Benachrichtigungen

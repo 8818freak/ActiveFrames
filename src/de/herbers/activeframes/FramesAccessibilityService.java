@@ -45,9 +45,12 @@ public class FramesAccessibilityService extends AccessibilityService {
         // die Liste stehen und die zuletzt benutzte App nicht oben links).
         ImageStore.clearDismissed(this, pkg);
         // Öffnen aus dem Launcher ist eine Nutzeraktion, die die Reihenfolge
-        // ändert -> im Hybrid-Modus den vollen, zuverlässigen Weg (sonst nimmt
-        // der BlackBerry Launcher die neue Reihenfolge nicht an). Unsichtbar,
-        // weil die geöffnete App den Startbildschirm gerade verdeckt.
+        // ändert -> die App als "gerade geöffnet" merken (steht damit sofort
+        // vorne, auch bevor der UsageStatsManager nachgezogen hat) und im
+        // Hybrid-Modus den vollen, zuverlässigen Weg nehmen (sonst nimmt der
+        // BlackBerry Launcher die neue Reihenfolge nicht an). Unsichtbar, weil
+        // die geöffnete App den Startbildschirm gerade verdeckt.
+        Settings.setLastOpened(this, pkg);
         FramesWidget.refreshAfterAction(this);
         if (pending != null) handler.removeCallbacks(pending);
         // Kurz warten, bis die App wirklich gezeichnet hat, dann abfotografieren.

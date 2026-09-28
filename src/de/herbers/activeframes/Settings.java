@@ -28,6 +28,8 @@ public final class Settings {
     private static final String K_BIG_ROWS = "big_rows"; // wie viele obere Reihen in voller Hoehe
     private static final String K_SHORT_PCT = "short_row_pct"; // Hoehe der folgenden Reihen in %
     private static final String K_PINNED = "pinned"; // Reihenfolge zaehlt -> \n-getrennt
+    private static final String K_LAST_OPENED = "last_opened_pkg"; // zuletzt geoeffnete App (Paket)
+    private static final String K_LAST_OPENED_AT = "last_opened_at"; // Zeitpunkt dazu
 
     private Settings() {}
 
@@ -109,6 +111,28 @@ public final class Settings {
         List<String> l = pinned(c);
         if (!l.remove(pkg)) l.add(pkg);
         setPinned(c, l);
+    }
+
+    /** Die gerade vom Nutzer geoeffnete App (per Kachel, aus dem Launcher oder
+     *  aus der EdgeTab-Karte) - damit orderedPkgs sie SOFORT oben links zeigen
+     *  kann, ohne auf den UsageStatsManager zu warten. Der hinkt beim In-den-
+     *  Vordergrund-Kommen ein paar Sekunden nach; im schonenden/Hybrid-Modus,
+     *  wo der volle (einzig umsortierende) Neuaufbau genau beim Oeffnen laeuft,
+     *  landete die frisch geoeffnete App sonst nicht zuverlaessig vorne. */
+    public static void setLastOpened(Context c, String pkg) {
+        if (pkg == null) return;
+        p(c).edit().putString(K_LAST_OPENED, pkg)
+                .putLong(K_LAST_OPENED_AT, System.currentTimeMillis()).apply();
+    }
+
+    /** Zuletzt geoeffnete App, aber nur wenn das noch nicht lange her ist -
+     *  danach uebernimmt ohnehin der UsageStatsManager (der bis dahin
+     *  nachgezogen hat), und ein alter Wert soll die echte MRU-Reihenfolge
+     *  nicht dauerhaft verfaelschen. */
+    public static String lastOpened(Context c) {
+        long at = p(c).getLong(K_LAST_OPENED_AT, 0);
+        if (at <= 0 || System.currentTimeMillis() - at > 120_000L) return null;
+        return p(c).getString(K_LAST_OPENED, null);
     }
 
     private static int clamp(int v, int lo, int hi) { return v < lo ? lo : (v > hi ? hi : v); }
