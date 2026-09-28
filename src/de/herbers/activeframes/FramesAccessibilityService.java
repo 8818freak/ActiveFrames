@@ -43,15 +43,18 @@ public class FramesAccessibilityService extends AccessibilityService {
         // Die App wurde gerade benutzt -> nicht mehr als "verworfen" behandeln
         // und die MRU-Reihenfolge des Widgets sofort auffrischen (sonst blieb
         // die Liste stehen und die zuletzt benutzte App nicht oben links).
-        ImageStore.clearDismissed(this, pkg);
-        // Öffnen aus dem Launcher ist eine Nutzeraktion, die die Reihenfolge
-        // ändert -> die App als "gerade geöffnet" merken (steht damit sofort
-        // vorne, auch bevor der UsageStatsManager nachgezogen hat) und im
-        // Hybrid-Modus den vollen, zuverlässigen Weg nehmen (sonst nimmt der
-        // BlackBerry Launcher die neue Reihenfolge nicht an). Unsichtbar, weil
-        // die geöffnete App den Startbildschirm gerade verdeckt.
+        // App als "gerade geöffnet" merken, damit sie beim nächsten (vollen)
+        // Neuaufbau sofort oben links steht, auch bevor der UsageStatsManager
+        // nachgezogen hat.
         Settings.setLastOpened(this, pkg);
-        FramesWidget.refreshAfterAction(this);
+        ImageStore.clearDismissed(this, pkg);
+        // NUR schonend auffrischen. Diese Bedienungshilfe feuert bei JEDEM
+        // App-Wechsel; ein voller Neuaufbau (setRemoteAdapter) an dieser Stelle
+        // ueberfordert den BlackBerry Launcher - die Scroll-Sammlung wird kalt,
+        // Kacheln werden teils nicht mehr anklickbar (0.21-Rueckschritt, hier
+        // zurueckgenommen). Den vollen, umsortierenden Weg nehmen nur die
+        // SELTENEN, ausdruecklichen Aktionen (Kacheldruck/Schliessen).
+        FramesWidget.refreshData(this);
         if (pending != null) handler.removeCallbacks(pending);
         // Kurz warten, bis die App wirklich gezeichnet hat, dann abfotografieren.
         pending = () -> capture(pkg);

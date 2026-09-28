@@ -5,6 +5,20 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.23
+- Rückschritt aus 0.21 behoben: Die Bedienungshilfe machte seit 0.21 bei JEDEM
+  App-Wechsel einen vollen Neuaufbau (setRemoteAdapter). Das überforderte im
+  Scroll-Modus den BlackBerry Launcher – die Sammlung wurde „kalt", Kacheln
+  waren teils nicht mehr anklickbar, und die Reihenfolge blieb hängen. Die
+  Bedienungshilfe frischt jetzt wieder nur schonend auf; den vollen,
+  umsortierenden Weg nehmen ausschließlich die seltenen, ausdrücklichen
+  Aktionen (Kacheldruck, Schließen). Die „gerade geöffnet"-Vormerkung aus 0.22
+  bleibt, damit die zuletzt geöffnete App beim nächsten vollen Neuaufbau sofort
+  oben links steht. Hinweis: Zuverlässiges Umsortieren beim Öffnen AUS dem
+  Launcher heraus ist im Scroll-Modus auf dem BlackBerry Launcher weiterhin
+  nicht sicher machbar – dafür das feste Raster (Scrollen aus) oder „Widget 2"
+  in EdgeTab nutzen.
+
 ## 0.22
 - Sortierung nach Öffnungsreihenfolge korrigiert: Die gerade geöffnete App
   (per Kachel, aus dem Launcher oder aus der EdgeTab-Karte) steht jetzt sofort
