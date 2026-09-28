@@ -5,6 +5,18 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.14
+- Der rote Stern erlischt jetzt auch, wenn die zugehörige Benachrichtigung aus
+  dem System entfernt (weggewischt/gelöscht) wird – nicht mehr nur beim Öffnen
+  der App. Er bleibt, solange noch eine echte Benachrichtigung dieser App aktiv
+  ist.
+- Das ✕ zum Schließen einer Kachel hat jetzt ein deutlich größeres Tippziel
+  (füllt die Balkenhöhe). Vorher ließ sich der kleine Knopf leicht verfehlen –
+  dann geschah gar nichts. Hinweis: Beim Schließen baut der Launcher das Widget
+  neu auf und lädt dabei die Kachelbilder kurz neu (sie können einen Moment an
+  der falschen Kachel erscheinen) – eine Grenze der Home-Widgets (RemoteViews).
+  Ruckelfrei und verlässlich ist das native „Widget 2“ in EdgeTab.
+
 ## 0.13
 - Sichern/Wiederherstellen erzeugt bzw. liest jetzt eine echte Datei über den
   System-Dateidialog (Storage Access Framework), statt nur Text anzuzeigen –
