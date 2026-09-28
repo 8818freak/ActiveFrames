@@ -21,10 +21,13 @@ letzten Benachrichtigung, roter Stern bei Neuem.*
 
 <table>
 <tr>
+<td><img src="screenshots/widget.png" width="220" alt="Active-Frames-Widget auf dem Startbildschirm"><br>Widget 1 (Startbildschirm)</td>
 <td><img src="screenshots/einrichtung.png" width="220" alt="Einrichtung und Berechtigungen"><br>Einrichtung</td>
 <td><img src="screenshots/einstellungen.png" width="220" alt="Widget-Einstellungen: Spalten, Kachelhöhe, Reihen, Scrollen"><br>Einstellungen</td>
 </tr>
 </table>
+
+<sub>Screenshots aus dem echten Betrieb – persönliche Inhalte in einzelnen Kacheln wurden geschwärzt.</sub>
 
 ## Features
 
@@ -69,6 +72,11 @@ available to a non-system app** on Android — only the system launcher, bound
 to SystemUI over privileged interfaces, can read `TaskSnapshot`s, and no
 launcher exposes them to other apps. The notification image is the closest
 feasible substitute (and is what commercial equivalents use, too).
+
+## Documentation / Dokumentation
+
+- **English:** [User guide](docs/ActiveFrames-Guide.pdf) · [Flyer](docs/ActiveFrames-Flyer.pdf)
+- **Deutsch:** [Anleitung](docs/ActiveFrames-Anleitung.pdf) · [Werbung](docs/ActiveFrames-Werbung.pdf)
 
 ## Building
 
