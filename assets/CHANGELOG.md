@@ -5,6 +5,25 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.12
+- Scroll-Modus des Home-Screen-Widgets (Widget 1) auf älteren Launchern
+  repariert: Die Kachelbilder werden jetzt als kleine Bitmaps direkt
+  übertragen (setImageViewBitmap) statt per content://-URI. Auf dem
+  BlackBerry Launcher lud die Sammlung URIs asynchron und band sie beim
+  Wiederverwenden von Kacheln an die falsche Zeile - daher das Vertauschen
+  von Bild und Name. BlackBerrys eigenes, sauber scrollendes Hub-Widget macht
+  es genauso (kleine Bitmaps pro Zeile). In einer Sammlung wird ohnehin nur
+  das Sichtbare übertragen, das sprengt den Binder-Speicher nicht.
+- Apps, die Bildschirmfotos unterbinden (z. B. BBMe, Banking), lieferten mit
+  der Bedienungshilfe ein schwarzes Kachelbild. Jetzt wird ein solches
+  Schwarzbild erkannt und stattdessen das App-Logo kachelgroß (mittig,
+  unverzerrt, unbeschnitten) auf dunklem Grund gezeigt.
+- Solange (noch) kein Kachelbild vorliegt, zeigt die Kachel jetzt ebenfalls das
+  App-Logo kachelgroß (mittig, unverzerrt) statt nur des App-Namens – gilt für
+  beide Darstellungen (fest und scrollbar).
+- Neu: Sichern &amp; Wiederherstellen der Einstellungen als Text zum Kopieren
+  (Startbildschirm der App), analog zu EdgeTab.
+
 ## 0.11
 - Datenkanal für „Widget 2": Ein neuer, streng abgesicherter Anbieter
   (FramesDataProvider) stellt die Kachel-Reihenfolge, die Sterne und die

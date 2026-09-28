@@ -59,20 +59,31 @@ class FramesRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
         if (small != null) t.setImageViewBitmap(R.id.tile_icon, small);
         t.setTextViewText(R.id.tile_label, label);
 
-        if (ImageStore.hasImage(ctx, pkg)) {
-            Uri uri = ImageStore.uriFor(ctx, pkg);
-            String lp = FramesWidget.launcherPkg(ctx);
-            if (lp != null) {
-                try { ctx.grantUriPermission(lp, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION); }
-                catch (Throwable ignored) {}
-            }
-            t.setImageViewUri(R.id.tile_image, uri);
+        // WICHTIG: Bild per setImageViewBitmap (kleines Bitmap), NICHT per
+        // setImageViewUri. Auf aelteren Launchern (BlackBerry Launcher) laedt
+        // die Sammlung URIs asynchron und bindet sie beim Recyceln an die
+        // falsche Zeile -> Bild/Name vertauscht. Genau darum verwendet auch
+        // BlackBerrys eigenes, sauber scrollendes Hub-Widget setImageViewBitmap
+        // mit kleinen Bitmaps. In einer Sammlung wird jede Zeile einzeln (und
+        // nur die sichtbaren) uebertragen, daher sprengt das den Binder nicht.
+        Bitmap image = ImageStore.getImageScaled(ctx, pkg, 160);
+        if (image != null) {
+            t.setImageViewBitmap(R.id.tile_image, image);
             t.setViewVisibility(R.id.tile_image, View.VISIBLE);
             t.setViewVisibility(R.id.tile_title, View.GONE);
         } else {
-            t.setViewVisibility(R.id.tile_image, View.GONE);
-            t.setTextViewText(R.id.tile_title, label);
-            t.setViewVisibility(R.id.tile_title, View.VISIBLE);
+            // Kein Kachelbild -> Logo kachelgross statt des Namens. Kleines
+            // Bitmap pro Zeile (die Sammlung uebertraegt nur Sichtbares).
+            Bitmap logo = AppInfoCache.logoTile(ctx, pkg, 200, 260);
+            if (logo != null) {
+                t.setImageViewBitmap(R.id.tile_image, logo);
+                t.setViewVisibility(R.id.tile_image, View.VISIBLE);
+                t.setViewVisibility(R.id.tile_title, View.GONE);
+            } else {
+                t.setViewVisibility(R.id.tile_image, View.GONE);
+                t.setTextViewText(R.id.tile_title, label);
+                t.setViewVisibility(R.id.tile_title, View.VISIBLE);
+            }
         }
         t.setViewVisibility(R.id.tile_star, ImageStore.isUnread(ctx, pkg) ? View.VISIBLE : View.GONE);
 

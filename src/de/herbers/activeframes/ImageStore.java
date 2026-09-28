@@ -44,6 +44,36 @@ final class ImageStore {
         return file(c, pkg).exists();
     }
 
+    private static String logoFileName(String pkg) {
+        return "logo_" + pkg.replaceAll("[^A-Za-z0-9._-]", "_") + ".png";
+    }
+
+    private static File logoFile(Context c, String pkg) {
+        return new File(dir(c), logoFileName(pkg));
+    }
+
+    /** content://-Adresse einer Logo-Kachel (App-Symbol mittig auf dunklem
+     *  Grund), bei Bedarf einmalig erzeugt. Fuer den festen Layout-Modus, wo
+     *  ALLE Kacheln in EINER RemoteViews stecken und grosse Bitmaps den Binder
+     *  sprengen - das Logo kommt daher (wie die echten Bilder) per URI. */
+    static android.net.Uri logoUriFor(Context c, String pkg) {
+        File f = logoFile(c, pkg);
+        if (!f.exists()) {
+            Bitmap logo = AppInfoCache.logoTile(c, pkg, 300, 400);
+            if (logo != null) {
+                try (FileOutputStream out = new FileOutputStream(f)) {
+                    logo.compress(Bitmap.CompressFormat.PNG, 90, out);
+                } catch (Throwable ignored) {}
+            }
+        }
+        if (!f.exists()) return null;
+        return new android.net.Uri.Builder()
+                .scheme("content").authority(FrameImageProvider.AUTHORITY)
+                .appendPath(logoFileName(pkg))
+                .appendQueryParameter("t", String.valueOf(f.lastModified()))
+                .build();
+    }
+
     /** content://-Adresse des Kachelbilds (vom Launcher per URI geladen, damit
      *  keine großen Bitmaps durch die begrenzte RemoteViews-Übertragung müssen).
      *  Zeitstempel als Query-Parameter, damit der Launcher ein geändertes Bild
@@ -75,6 +105,15 @@ final class ImageStore {
         } catch (Throwable t) {
             return null;
         }
+    }
+
+    /** Kachelbild klein skaliert - fuer den Scroll-Modus (Sammlung), wo jede
+     *  Zeile ihr eigenes Bitmap per setImageViewBitmap traegt (wie BlackBerrys
+     *  Hub-Widget). Kleine Bitmaps, damit die (batchweise) uebertragenen Zeilen
+     *  den Binder nicht sprengen. */
+    static Bitmap getImageScaled(Context c, String pkg, int maxEdge) {
+        Bitmap b = getImage(c, pkg);
+        return b != null ? scaleDown(b, maxEdge) : null;
     }
 
     private static Bitmap scaleDown(Bitmap b, int maxEdge) {

@@ -162,9 +162,24 @@ public class FramesWidget extends AppWidgetProvider {
             t.setViewVisibility(R.id.tile_image, View.VISIBLE);
             t.setViewVisibility(R.id.tile_title, View.GONE);
         } else {
-            t.setViewVisibility(R.id.tile_image, View.GONE);
-            t.setTextViewText(R.id.tile_title, label);
-            t.setViewVisibility(R.id.tile_title, View.VISIBLE);
+            // Kein Kachelbild -> statt des App-Namens das Logo kachelgross
+            // (mittig, unverzerrt, unbeschnitten) einblenden. Per URI, damit
+            // die eine grosse RemoteViews des festen Layouts den Binder nicht
+            // sprengt (wie bei den echten Bildern).
+            Uri logoUri = ImageStore.logoUriFor(ctx, pkg);
+            if (logoUri != null) {
+                if (launcherPkg != null) {
+                    try { ctx.grantUriPermission(launcherPkg, logoUri, Intent.FLAG_GRANT_READ_URI_PERMISSION); }
+                    catch (Throwable ignored) {}
+                }
+                t.setImageViewUri(R.id.tile_image, logoUri);
+                t.setViewVisibility(R.id.tile_image, View.VISIBLE);
+                t.setViewVisibility(R.id.tile_title, View.GONE);
+            } else {
+                t.setViewVisibility(R.id.tile_image, View.GONE);
+                t.setTextViewText(R.id.tile_title, label);
+                t.setViewVisibility(R.id.tile_title, View.VISIBLE);
+            }
         }
         t.setViewVisibility(R.id.tile_star, ImageStore.isUnread(ctx, pkg) ? View.VISIBLE : View.GONE);
 

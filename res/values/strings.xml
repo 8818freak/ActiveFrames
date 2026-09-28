@@ -46,4 +46,15 @@
     <string name="pin_title">Schnellstart-Apps</string>
     <string name="save">Speichern</string>
     <string name="cancel">Abbrechen</string>
+
+    <string name="sec_backup">Sichern &amp; Wiederherstellen</string>
+    <string name="backup_desc">Sichert alle Kachel-Einstellungen (Spalten, Format, Anzahl, Reihen, Schnellstart-Apps) als Text zum Kopieren – z. B. vor einem Gerätewechsel. Kachelbilder und Sterne werden nicht gesichert; sie bauen sich von selbst wieder auf.</string>
+    <string name="backup_export">Sichern</string>
+    <string name="backup_import">Wiederherstellen</string>
+    <string name="backup_copy">Kopieren</string>
+    <string name="backup_copied">In die Zwischenablage kopiert.</string>
+    <string name="backup_paste_hint">Sicherungstext hier einfügen…</string>
+    <string name="backup_restore_btn">Wiederherstellen</string>
+    <string name="backup_restored">Einstellungen wiederhergestellt.</string>
+    <string name="backup_bad">Ungültiger oder beschädigter Sicherungstext.</string>
 </resources>

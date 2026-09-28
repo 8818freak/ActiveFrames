@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
@@ -41,6 +42,28 @@ final class AppInfoCache {
         if (base == null) return null;
         if (sizePx <= 0 || sizePx == base.getWidth()) return base;
         return Bitmap.createScaledBitmap(base, sizePx, sizePx, true);
+    }
+
+    /** Kachel mit dem App-Logo mittig auf dunklem Grund - unverzerrt (Seiten-
+     *  verhaeltnis des Symbols bleibt) und mit reichlich Rand, damit es auch bei
+     *  zuschneidender Anzeige (Center-Crop) nicht angeschnitten wird. Fuer den
+     *  Fall "kein Kachelbild vorhanden" (statt nur des Namens) und fuer Apps,
+     *  die Bildschirmfotos unterbinden (dann statt Schwarzbild). */
+    static Bitmap logoTile(Context c, String pkg, int w, int h) {
+        try {
+            Drawable icon = c.getPackageManager().getApplicationIcon(pkg);
+            if (icon == null) return null;
+            Bitmap bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            Canvas canvas = new Canvas(bmp);
+            canvas.drawColor(Color.parseColor("#22282C"));
+            int size = Math.round(Math.min(w, h) * 0.55f);
+            int left = (w - size) / 2, top = (h - size) / 2;
+            icon.setBounds(left, top, left + size, top + size);
+            icon.draw(canvas);
+            return bmp;
+        } catch (Throwable t) {
+            return null;
+        }
     }
 
     private static Bitmap renderIcon(Context c, String pkg, int size) {

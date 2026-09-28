@@ -1,17 +1,23 @@
 package de.herbers.activeframes;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /** Startbildschirm: erklaert Active Frames und fuehrt durch die zwei
  *  Freischaltungen (Nutzungsdatenzugriff fuer die Reihenfolge, Benachrichti-
@@ -60,6 +66,11 @@ public class MainActivity extends Activity {
         body(root, getString(R.string.main_widget_desc));
         button(root, getString(R.string.open_settings_btn), () ->
                 startActivity(new Intent(this, ConfigActivity.class)));
+
+        section(root, getString(R.string.sec_backup));
+        body(root, getString(R.string.backup_desc));
+        button(root, getString(R.string.backup_export), this::showExport);
+        button(root, getString(R.string.backup_import), this::showImport);
 
         section(root, getString(R.string.changelog_title));
         button(root, getString(changelogOpen ? R.string.changelog_hide : R.string.changelog_show),
@@ -119,6 +130,52 @@ public class MainActivity extends Activity {
             if (cn != null && cn.equals(me)) return true;
         }
         return false;
+    }
+
+    // ---- Sichern/Wiederherstellen (analog zu EdgeTab) ----
+    private void showExport() {
+        final String text = Settings.exportText(this);
+        EditText ed = new EditText(this);
+        ed.setText(text);
+        ed.setTextSize(11);
+        ed.setTextColor(Color.WHITE);
+        ed.setKeyListener(null); // schreibgeschuetzt, aber markier-/kopierbar
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.backup_export)
+                .setView(wrapInScroll(ed))
+                .setPositiveButton(R.string.backup_copy, (d, w) -> {
+                    ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                    if (cb != null) cb.setPrimaryClip(ClipData.newPlainText("Active Frames Backup", text));
+                    Toast.makeText(this, R.string.backup_copied, Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void showImport() {
+        EditText ed = new EditText(this);
+        ed.setHint(R.string.backup_paste_hint);
+        ed.setTextSize(11);
+        ed.setTextColor(Color.WHITE);
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.backup_import)
+                .setView(wrapInScroll(ed))
+                .setPositiveButton(R.string.backup_restore_btn, (d, w) -> {
+                    boolean ok = Settings.importText(this, ed.getText().toString().trim());
+                    Toast.makeText(this, getString(ok ? R.string.backup_restored : R.string.backup_bad),
+                            Toast.LENGTH_LONG).show();
+                    if (ok) { FramesWidget.refreshData(this); buildUi(); }
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private ScrollView wrapInScroll(View v) {
+        ScrollView s = new ScrollView(this);
+        int pad = dp(16);
+        s.setPadding(pad, dp(8), pad, dp(8));
+        s.addView(v);
+        return s;
     }
 
     private void openSettings(String action) {

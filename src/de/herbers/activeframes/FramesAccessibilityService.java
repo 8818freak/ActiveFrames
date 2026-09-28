@@ -2,6 +2,7 @@ package de.herbers.activeframes;
 
 import android.accessibilityservice.AccessibilityService;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.hardware.HardwareBuffer;
 import android.os.Build;
 import android.os.Handler;
@@ -65,8 +66,15 @@ public class FramesAccessibilityService extends AccessibilityService {
                                     Bitmap soft = hw.copy(Bitmap.Config.ARGB_8888, false);
                                     hw.recycle();
                                     if (soft != null) {
-                                        ImageStore.putImage(FramesAccessibilityService.this, pkg, soft);
-                                        FramesWidget.refreshData(FramesAccessibilityService.this);
+                                        // Apps, die Bildschirmfotos unterbinden (z.B. BBMe,
+                                        // Banking), liefern ein schwarzes Bild. Dann statt
+                                        // des Schwarzbilds das App-Logo kachelgross (mittig,
+                                        // unverzerrt, unbeschnitten) zeigen.
+                                        Bitmap store = isMostlyBlack(soft) ? logoTile(pkg) : soft;
+                                        if (store != null) {
+                                            ImageStore.putImage(FramesAccessibilityService.this, pkg, store);
+                                            FramesWidget.refreshData(FramesAccessibilityService.this);
+                                        }
                                     }
                                 }
                             } catch (Throwable ignored) {
@@ -79,6 +87,35 @@ public class FramesAccessibilityService extends AccessibilityService {
                         }
                     });
         } catch (Throwable ignored) {}
+    }
+
+    /** Grob pruefen, ob das Bild praktisch komplett schwarz ist - so liefern
+     *  Apps, die Bildschirmfotos unterbinden (FLAG_SECURE), ihr "Foto". Es wird
+     *  ein Raster von Bildpunkten abgetastet; sind fast alle sehr dunkel, gilt
+     *  das Bild als schwarz. */
+    private boolean isMostlyBlack(Bitmap b) {
+        try {
+            int w = b.getWidth(), h = b.getHeight();
+            if (w <= 0 || h <= 0) return true;
+            int stepX = Math.max(1, w / 24), stepY = Math.max(1, h / 40);
+            int total = 0, dark = 0;
+            for (int y = 0; y < h; y += stepY) {
+                for (int x = 0; x < w; x += stepX) {
+                    int c = b.getPixel(x, y);
+                    total++;
+                    if (Color.red(c) < 14 && Color.green(c) < 14 && Color.blue(c) < 14) dark++;
+                }
+            }
+            return total > 0 && dark >= total * 0.99;
+        } catch (Throwable t) {
+            return false;
+        }
+    }
+
+    /** Kachel mit dem App-Logo mittig auf dunklem Grund (gemeinsamer Helfer) -
+     *  fuer Apps, die Bildschirmfotos unterbinden (statt Schwarzbild). */
+    private Bitmap logoTile(String pkg) {
+        return AppInfoCache.logoTile(this, pkg, 320, 420);
     }
 
     @Override public void onInterrupt() {}
