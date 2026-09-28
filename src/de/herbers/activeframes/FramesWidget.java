@@ -144,6 +144,16 @@ public class FramesWidget extends AppWidgetProvider {
             root.setInt(R.id.grid, "setNumColumns", Settings.columns(ctx));
             Intent svc = new Intent(ctx, FramesWidgetService.class);
             svc.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id);
+            // EINDEUTIGE Adapter-Adresse je Aufbau erzwingt, dass der Launcher
+            // die Sammlung KOMPLETT neu erzeugt, statt alte Item-Views zu
+            // recyceln. Auf dem BlackBerry Launcher aktualisierte das Recycling
+            // beim Umsortieren nur einen Teil (Klick-Ziel/Reihenfolge stimmten,
+            // aber Bild/Symbol/Name der Kachel blieben veraltet stehen -> Kachel
+            // zeigte die falsche App, obwohl der Tipp die richtige öffnete). Mit
+            // einer je Aufbau anderen Data-URI sieht der Launcher einen neuen
+            // Adapter und zeichnet jede Kachel frisch. Der appWidgetId-Extra
+            // (den die Factory liest) bleibt unverändert.
+            svc.putExtra("af_rev", android.os.SystemClock.elapsedRealtime());
             svc.setData(Uri.parse(svc.toUri(Intent.URI_INTENT_SCHEME)));
             root.setRemoteAdapter(R.id.grid, svc);
             root.setEmptyView(R.id.grid, R.id.empty);
@@ -261,7 +271,10 @@ public class FramesWidget extends AppWidgetProvider {
         // Reihenfolge - und die bleibt dort haengen, weil die nachfolgenden
         // schonenden Auffrischungen auf dem BlackBerry Launcher nicht umsortieren.
         String justOpened = Settings.lastOpened(ctx);
+        String launcher = launcherPkg(ctx);
         if (justOpened != null && !out.contains(justOpened) && !dismissed.contains(justOpened)
+                && !justOpened.equals(ctx.getPackageName())
+                && !justOpened.equals(launcher)
                 && ctx.getPackageManager().getLaunchIntentForPackage(justOpened) != null) {
             out.add(justOpened);
         }

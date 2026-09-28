@@ -5,6 +5,30 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.24
+- Scroll-Modus auf dem BlackBerry Launcher gründlich repariert (auf dem Gerät
+  getestet). Bisher recycelte der BB Launcher die Sammlungs-Kacheln fehlerhaft:
+  beim Umsortieren aktualisierte er Bild und Text getrennt, sodass eine Kachel
+  z. B. das Bild einer App, aber Symbol/Name einer anderen zeigte – und die
+  Reihenfolge stand nicht. Mehrere Bausteine zusammen lösen das:
+  - Jede Kachel wird jetzt als EIN Bild gezeichnet (Kachelbild + Symbol + Name +
+    Stern zusammen). Bild und Name können damit nicht mehr auseinanderlaufen;
+    nur das feste ✕ bleibt ein eigenes, unveränderliches Element.
+  - Die Sammlung wird bei jedem vollen Neuaufbau frisch erzeugt (eindeutige
+    Adapter-Adresse) und ohne stabile IDs, damit der Launcher keine veralteten
+    Kachel-Ansichten wiederverwendet.
+  - Die gerade geöffnete App wird sofort vorne einsortiert (unabhängig von der
+    Verzögerung des UsageStatsManager); der Start-Launcher selbst wird dabei
+    NICHT als „geöffnete App“ gewertet (sonst bekam der Startbildschirm beim
+    Zurückkehren eine eigene Kachel und verschob die Reihenfolge).
+  - Öffnen aus dem Launcher (Bedienungshilfe) erzwingt nicht mehr bei jedem
+    Fenster-Ereignis einen vollen Neuaufbau (das machte die Sammlung „kalt“ und
+    Kacheln unanklickbar, 0.21-Fehler): sofort nur schonend, im Hybrid-Modus
+    zusätzlich EIN gebündelter, kurz verzögerter voller Neuaufbau pro echtem
+    App-Wechsel (unsichtbar, weil die geöffnete App den Startbildschirm verdeckt).
+  Ergebnis: Scrollen bleibt flüssig, die Reihenfolge stimmt beim Öffnen (per
+  Kachel UND aus dem Launcher), Kacheln passen zusammen und sind anklickbar.
+
 ## 0.23
 - Rückschritt aus 0.21 behoben: Die Bedienungshilfe machte seit 0.21 bei JEDEM
   App-Wechsel einen vollen Neuaufbau (setRemoteAdapter). Das überforderte im

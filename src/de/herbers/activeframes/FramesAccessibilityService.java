@@ -24,6 +24,7 @@ public class FramesAccessibilityService extends AccessibilityService {
     private volatile String currentPkg;
     private String lastForeground;
     private Runnable pending;
+    private Runnable pendingReorder;
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
@@ -33,6 +34,14 @@ public class FramesAccessibilityService extends AccessibilityService {
         if (p == null) return;
         String pkg = p.toString();
         if (pkg.equals(getPackageName())) return;
+        // Den Start-Launcher NICHT als geoeffnete App behandeln: sonst wuerde
+        // beim Zurueckkehren zum Startbildschirm der Launcher selbst als "zuletzt
+        // geoeffnet" vorgemerkt und bekaeme (mit einem Foto des Startbildschirms)
+        // eine Kachel oben - genau das verschob die Reihenfolge (UsageProvider
+        // filtert den Launcher ohnehin heraus, die lastOpened-Vormerkung tat es
+        // bisher nicht).
+        String launcher = FramesWidget.launcherPkg(this);
+        if (launcher != null && pkg.equals(launcher)) return;
         try {
             if (getPackageManager().getLaunchIntentForPackage(pkg) == null) return; // nur startbare Apps
         } catch (Throwable t) { return; }
@@ -48,13 +57,23 @@ public class FramesAccessibilityService extends AccessibilityService {
         // nachgezogen hat.
         Settings.setLastOpened(this, pkg);
         ImageStore.clearDismissed(this, pkg);
-        // NUR schonend auffrischen. Diese Bedienungshilfe feuert bei JEDEM
-        // App-Wechsel; ein voller Neuaufbau (setRemoteAdapter) an dieser Stelle
-        // ueberfordert den BlackBerry Launcher - die Scroll-Sammlung wird kalt,
-        // Kacheln werden teils nicht mehr anklickbar (0.21-Rueckschritt, hier
-        // zurueckgenommen). Den vollen, umsortierenden Weg nehmen nur die
-        // SELTENEN, ausdruecklichen Aktionen (Kacheldruck/Schliessen).
+        // Sofort schonend auffrischen (Stern/Verworfen billig aktualisieren).
+        // Ein voller Neuaufbau (setRemoteAdapter) darf hier NICHT bei jedem
+        // App-Wechsel-Ereignis feuern: das ueberfordert den BlackBerry Launcher,
+        // die Scroll-Sammlung wird kalt, Kacheln teils nicht mehr anklickbar
+        // (der 0.21-Rueckschritt).
         FramesWidget.refreshData(this);
+        // Im Hybrid-Modus zusaetzlich EINEN gebuendelten, kurz verzoegerten
+        // vollen Neuaufbau planen (hoechstens einmal pro echtem App-Wechsel,
+        // nicht pro Fenster-Ereignis): nur so uebernimmt der BlackBerry Launcher
+        // die neue Reihenfolge. Die Verzoegerung gibt dem UsageStatsManager Zeit
+        // nachzuziehen (zusammen mit Settings.lastOpened -> korrekte Ordnung);
+        // unsichtbar, weil die geoeffnete App den Startbildschirm verdeckt.
+        if (Settings.scroll(this) && Settings.gentleRefresh(this) && Settings.gentleFullClose(this)) {
+            if (pendingReorder != null) handler.removeCallbacks(pendingReorder);
+            pendingReorder = () -> FramesWidget.rebuildAll(this);
+            handler.postDelayed(pendingReorder, 900);
+        }
         if (pending != null) handler.removeCallbacks(pending);
         // Kurz warten, bis die App wirklich gezeichnet hat, dann abfotografieren.
         pending = () -> capture(pkg);
