@@ -66,7 +66,7 @@ class FramesRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
         // BlackBerrys eigenes, sauber scrollendes Hub-Widget setImageViewBitmap
         // mit kleinen Bitmaps. In einer Sammlung wird jede Zeile einzeln (und
         // nur die sichtbaren) uebertragen, daher sprengt das den Binder nicht.
-        Bitmap image = ImageStore.getImageScaled(ctx, pkg, 160);
+        Bitmap image = ImageStore.getImageScaledCached(ctx, pkg, 160);
         if (image != null) {
             t.setImageViewBitmap(R.id.tile_image, image);
             t.setViewVisibility(R.id.tile_image, View.VISIBLE);
@@ -74,7 +74,7 @@ class FramesRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
         } else {
             // Kein Kachelbild -> Logo kachelgross statt des Namens. Kleines
             // Bitmap pro Zeile (die Sammlung uebertraegt nur Sichtbares).
-            Bitmap logo = AppInfoCache.logoTile(ctx, pkg, 200, 260);
+            Bitmap logo = AppInfoCache.logoTileCached(ctx, pkg, 200, 260);
             if (logo != null) {
                 t.setImageViewBitmap(R.id.tile_image, logo);
                 t.setViewVisibility(R.id.tile_image, View.VISIBLE);

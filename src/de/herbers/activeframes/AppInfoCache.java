@@ -66,6 +66,20 @@ final class AppInfoCache {
         }
     }
 
+    private static final ConcurrentHashMap<String, Bitmap> LOGO_TILES = new ConcurrentHashMap<>();
+
+    /** Wie logoTile, aber gecacht (Logos aendern sich praktisch nie). Spart das
+     *  Neuzeichnen bei jedem getViewAt - beschleunigt die Sammlungs-Neubindung
+     *  (Scroll-Modus) und verkuerzt so das "Springen". */
+    static Bitmap logoTileCached(Context c, String pkg, int w, int h) {
+        String key = pkg + '@' + w + 'x' + h;
+        Bitmap b = LOGO_TILES.get(key);
+        if (b != null && !b.isRecycled()) return b;
+        b = logoTile(c, pkg, w, h);
+        if (b != null) LOGO_TILES.put(key, b);
+        return b;
+    }
+
     private static Bitmap renderIcon(Context c, String pkg, int size) {
         try {
             Drawable d = c.getPackageManager().getApplicationIcon(pkg);

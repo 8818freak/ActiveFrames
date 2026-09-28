@@ -118,6 +118,32 @@ final class ImageStore {
         return b != null ? scaleDown(b, maxEdge) : null;
     }
 
+    // In-Memory-Cache der verkleinerten Kachelbilder. Die Sammlung (Scroll-
+    // Modus) baut sich beim Auffrischen - z.B. nach dem Schliessen einer Kachel
+    // - komplett neu auf; ohne Cache dekodiert getViewAt jedes sichtbare Bild
+    // erneut von der Platte, was die Neubindung verzoegert und das "Springen"
+    // verlaengert. Mit Cache ist die Neubindung schnell, das Springen kurz.
+    private static final android.util.LruCache<String, Bitmap> SCALED_CACHE =
+            new android.util.LruCache<String, Bitmap>(8 * 1024 * 1024) {
+                @Override protected int sizeOf(String key, Bitmap b) {
+                    return b == null ? 0 : b.getByteCount();
+                }
+            };
+
+    /** Wie getImageScaled, aber aus dem Speicher-Cache (Schluessel: Paket +
+     *  Groesse + Dateizeit - aendert sich das Bild, wird automatisch neu
+     *  dekodiert). */
+    static Bitmap getImageScaledCached(Context c, String pkg, int maxEdge) {
+        File f = file(c, pkg);
+        if (!f.exists()) return null;
+        String key = pkg + '@' + maxEdge + '@' + f.lastModified();
+        Bitmap cached = SCALED_CACHE.get(key);
+        if (cached != null && !cached.isRecycled()) return cached;
+        Bitmap b = getImageScaled(c, pkg, maxEdge);
+        if (b != null) SCALED_CACHE.put(key, b);
+        return b;
+    }
+
     private static Bitmap scaleDown(Bitmap b, int maxEdge) {
         int w = b.getWidth(), h = b.getHeight();
         int longest = Math.max(w, h);

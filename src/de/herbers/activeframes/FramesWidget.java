@@ -168,9 +168,9 @@ public class FramesWidget extends AppWidgetProvider {
         // ist an die Kachelzahl gekoppelt (imageEdge), damit die gesamte, in
         // EINER Transaktion uebertragene RemoteViews unter der ~1-MB-Binder-
         // Grenze bleibt. Kein Kachelbild -> das App-Logo kachelgross.
-        Bitmap image = ImageStore.getImageScaled(ctx, pkg, maxEdge);
+        Bitmap image = ImageStore.getImageScaledCached(ctx, pkg, maxEdge);
         if (image == null) {
-            image = AppInfoCache.logoTile(ctx, pkg, Math.round(maxEdge * 0.75f), maxEdge);
+            image = AppInfoCache.logoTileCached(ctx, pkg, Math.round(maxEdge * 0.75f), maxEdge);
         }
         if (image != null) {
             t.setImageViewBitmap(R.id.tile_image, image);
