@@ -95,10 +95,10 @@ public class FramesDataProvider extends ContentProvider {
         if ("opened".equals(method)) {
             ImageStore.clearUnread(ctx, arg);
             ImageStore.clearDismissed(ctx, arg);
-            FramesWidget.refreshData(ctx);
+            FramesWidget.refreshAfterAction(ctx);
         } else if ("dismiss".equals(method)) {
             ImageStore.markDismissed(ctx, arg);
-            FramesWidget.refreshData(ctx);
+            FramesWidget.refreshAfterAction(ctx);
         }
         return null;
     }

@@ -51,18 +51,7 @@ public class FramesWidget extends AppWidgetProvider {
             if (pkg == null) return;
             if (intent.getBooleanExtra(EXTRA_DISMISS, false)) {
                 ImageStore.markDismissed(ctx, pkg);
-                // Hybrid: Beim Schließen den VOLLEN Weg nehmen, wenn schonendes
-                // Auffrischen aktiv ist und "Beim Schließen voll auffrischen"
-                // gewählt wurde. Das ist auf Launchern, die das schonende
-                // Auffrischen nur unzuverlässig annehmen (BlackBerry Launcher),
-                // ein zuverlässiges Schließen und weckt die Sammlung wieder auf,
-                // sodass das schonende Auffrischen danach wieder greift.
-                if (Settings.scroll(ctx) && Settings.gentleRefresh(ctx)
-                        && Settings.gentleFullClose(ctx)) {
-                    rebuildAll(ctx);
-                } else {
-                    refreshData(ctx);
-                }
+                refreshAfterAction(ctx);
                 return;
             }
             ImageStore.clearUnread(ctx, pkg);
@@ -74,7 +63,7 @@ public class FramesWidget extends AppWidgetProvider {
                     ctx.startActivity(launch);
                 }
             } catch (Throwable ignored) {}
-            refreshData(ctx);
+            refreshAfterAction(ctx);
         } else if (Intent.ACTION_USER_PRESENT.equals(action)) {
             refreshData(ctx);
         }
@@ -99,6 +88,27 @@ public class FramesWidget extends AppWidgetProvider {
         for (int id : ids) {
             if (gentle) mgr.notifyAppWidgetViewDataChanged(id, R.id.grid);
             else updateWidget(ctx, mgr, id);
+        }
+    }
+
+    /** Auffrischen nach einer NUTZERAKTION, die die Reihenfolge oder den
+     *  Kachelsatz ändert: eine Kachel (oder eine App aus dem Launcher) öffnen
+     *  bzw. eine Kachel schließen.
+     *
+     *  Im Hybrid-Modus (Scrollen + „Schonend auffrischen" + „Bei Aktionen voll
+     *  auffrischen") nimmt eine solche Aktion den VOLLEN, zuverlässigen Weg
+     *  (updateAppWidget). Nur so übernimmt der BlackBerry Launcher die neue
+     *  Reihenfolge und weckt die Sammlung wieder auf, sodass das schonende
+     *  Auffrischen (Scrollen, eintreffende Benachrichtigungen, Bild-Nachschärfen)
+     *  danach wieder greift. Beim Öffnen ist der volle Weg besonders günstig:
+     *  die geöffnete App verdeckt den Startbildschirm, das kurze Neu-Aufbauen
+     *  ist also unsichtbar. Sonst wie {@link #refreshData}. */
+    static void refreshAfterAction(Context ctx) {
+        if (Settings.scroll(ctx) && Settings.gentleRefresh(ctx)
+                && Settings.gentleFullClose(ctx)) {
+            rebuildAll(ctx);
+        } else {
+            refreshData(ctx);
         }
     }
 
