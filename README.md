@@ -10,18 +10,57 @@ Frames" — ein größenveränderbares Startbildschirm-Widget mit den zuletzt
 benutzten Apps als scrollbares Kachelraster; jede Kachel zeigt den Inhalt der
 letzten Benachrichtigung, roter Stern bei Neuem.*
 
+## Requirements / Voraussetzungen
+
+- **Android 10 or newer** (`minSdkVersion` 29). Built against / target
+  `targetSdkVersion` 34 (Android 14).
+- *Läuft ab **Android 10** aufwärts (Mindest-SDK 29), erstellt/geprüft gegen
+  Ziel-SDK 34 (Android 14). Kein BlackBerry-Gerät nötig.*
+
+## Screenshots
+
+<table>
+<tr>
+<td><img src="screenshots/einrichtung.png" width="220" alt="Einrichtung und Berechtigungen"><br>Einrichtung</td>
+<td><img src="screenshots/einstellungen.png" width="220" alt="Widget-Einstellungen: Spalten, Kachelhöhe, Reihen, Scrollen"><br>Einstellungen</td>
+</tr>
+</table>
+
 ## Features
 
 - **Scrollable tile grid widget**, freely resizable. Adjustable columns, tile
   height (i.e. aspect ratio — rectangular like BlackBerry's screens, not only
-  square), tile count (scroll up for the rest), and labels on/off.
+  square), tile count, variable row heights (larger rows on top), and an
+  optional scrolling mode (see note below).
 - **MRU order like BlackBerry**: top-left is the most recently used app, then
   the one before, and so on (via `UsageStatsManager`).
 - **Living tiles**: each tile shows the latest notification's image — chat
-  photo, album art, large icon — falling back to the app icon
+  photo, album art, large icon — falling back to the app **logo** shown tile-
+  sized (centred, undistorted) when there is no image
   (`NotificationListenerService`).
 - **Red star** on a tile when that app has something new; cleared on launch.
+- **Optional real app photos**: with the accessibility service enabled, a tile
+  can show a real screenshot of the app's last state (true Active-Frames look).
+  Apps that block screenshots (banking, BBMe) show their logo instead of a
+  black tile. Images stay on the device only.
+- **Second, native widget for [EdgeTab](https://github.com/8818freak/EdgeTab)
+  ("Widget 2")**: an "Active Frames" card inside EdgeTab's edge panel that reads
+  its data (order, stars, images) from Active Frames over a private, EdgeTab-
+  only content provider — so EdgeTab needs no extra permissions, and because
+  EdgeTab draws the tiles itself, that card scrolls reliably even on older
+  launchers.
+- **Backup & restore** of all settings to a file (via the system file dialog).
 - No ads, no analytics, no billing, no internet permission.
+
+## Scrolling note / Hinweis zum Scrollen
+
+The home-screen widget's optional scrolling mode uses an Android RemoteViews
+collection. On most launchers it works; on some older ones (e.g. the BlackBerry
+Launcher) collection tiles could previously swap image/name. That is fixed by
+sending small per-tile bitmaps (the same approach BlackBerry's own Hub widget
+uses) instead of `content://` image URIs. If you still see glitches on an
+unusual launcher, turn scrolling off — the fixed grid with variable row heights
+is always correct — or use "Widget 2" inside EdgeTab, which scrolls natively.
 
 ## The honest limitation
 
