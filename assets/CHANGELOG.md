@@ -5,6 +5,11 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.13
+- Sichern/Wiederherstellen erzeugt bzw. liest jetzt eine echte Datei über den
+  System-Dateidialog (Storage Access Framework), statt nur Text anzuzeigen –
+  wie bei EdgeTab, ohne Speicher-Berechtigung.
+
 ## 0.12
 - Scroll-Modus des Home-Screen-Widgets (Widget 1) auf älteren Launchern
   repariert: Die Kachelbilder werden jetzt als kleine Bitmaps direkt

@@ -48,13 +48,11 @@
     <string name="cancel">Cancel</string>
 
     <string name="sec_backup">Backup &amp; restore</string>
-    <string name="backup_desc">Saves all tile settings (columns, format, count, rows, quick-launch apps) as text to copy – e.g. before switching devices. Tile images and stars are not saved; they rebuild themselves.</string>
-    <string name="backup_export">Back up</string>
-    <string name="backup_import">Restore</string>
-    <string name="backup_copy">Copy</string>
-    <string name="backup_copied">Copied to clipboard.</string>
-    <string name="backup_paste_hint">Paste backup text here…</string>
-    <string name="backup_restore_btn">Restore</string>
+    <string name="backup_desc">Saves all tile settings (columns, format, count, rows, quick-launch apps) as a file – e.g. before switching devices. Tile images and stars are not saved; they rebuild themselves.</string>
+    <string name="backup_export">Back up (file)</string>
+    <string name="backup_import">Restore (file)</string>
+    <string name="backup_saved">Backup saved.</string>
+    <string name="backup_save_failed">Saving failed.</string>
     <string name="backup_restored">Settings restored.</string>
-    <string name="backup_bad">Invalid or corrupted backup text.</string>
+    <string name="backup_bad">Invalid or corrupted backup file.</string>
 </resources>

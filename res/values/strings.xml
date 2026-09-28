@@ -48,13 +48,11 @@
     <string name="cancel">Abbrechen</string>
 
     <string name="sec_backup">Sichern &amp; Wiederherstellen</string>
-    <string name="backup_desc">Sichert alle Kachel-Einstellungen (Spalten, Format, Anzahl, Reihen, Schnellstart-Apps) als Text zum Kopieren – z. B. vor einem Gerätewechsel. Kachelbilder und Sterne werden nicht gesichert; sie bauen sich von selbst wieder auf.</string>
-    <string name="backup_export">Sichern</string>
-    <string name="backup_import">Wiederherstellen</string>
-    <string name="backup_copy">Kopieren</string>
-    <string name="backup_copied">In die Zwischenablage kopiert.</string>
-    <string name="backup_paste_hint">Sicherungstext hier einfügen…</string>
-    <string name="backup_restore_btn">Wiederherstellen</string>
+    <string name="backup_desc">Sichert alle Kachel-Einstellungen (Spalten, Format, Anzahl, Reihen, Schnellstart-Apps) als Datei – z. B. vor einem Gerätewechsel. Kachelbilder und Sterne werden nicht gesichert; sie bauen sich von selbst wieder auf.</string>
+    <string name="backup_export">Sichern (Datei)</string>
+    <string name="backup_import">Wiederherstellen (Datei)</string>
+    <string name="backup_saved">Sicherung gespeichert.</string>
+    <string name="backup_save_failed">Speichern fehlgeschlagen.</string>
     <string name="backup_restored">Einstellungen wiederhergestellt.</string>
-    <string name="backup_bad">Ungültiger oder beschädigter Sicherungstext.</string>
+    <string name="backup_bad">Ungültige oder beschädigte Sicherungsdatei.</string>
 </resources>
