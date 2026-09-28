@@ -5,6 +5,14 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.19
+- Neue Option „Schonend auffrischen (moderne Launcher)“ (Einstellungen, nur im
+  Scroll-Modus): aktualisiert die Kacheln über notifyAppWidgetViewDataChanged,
+  ohne die Sammlung neu aufzubauen – auf modernen Launchern verschwindet damit
+  das Bild-„Springen“ beim Schließen. Standard AUS, mit Warnhinweis: Manche
+  Launcher (u. a. der BlackBerry Launcher) ignorieren den Weg – dann lässt sich
+  keine Kachel mehr schließen; dann wieder ausschalten.
+
 ## 0.18
 - Springen im Scroll-Modus abgemildert: Die verkleinerten Kachelbilder (und
   Logos) liegen jetzt in einem Speicher-Cache. Beim Neuaufbau der Sammlung nach

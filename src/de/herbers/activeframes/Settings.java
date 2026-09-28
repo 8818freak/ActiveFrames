@@ -23,6 +23,7 @@ public final class Settings {
     private static final String K_SHOW_LABELS = "show_labels";
     private static final String K_AUTO_HEIGHT = "auto_height"; // Kachelhoehe = Bildschirmformat
     private static final String K_SCROLL = "scroll"; // scrollbare Sammlung statt fester Raster
+    private static final String K_GENTLE = "gentle_refresh"; // schonendes Auffrischen (moderne Launcher)
     private static final String K_BIG_ROWS = "big_rows"; // wie viele obere Reihen in voller Hoehe
     private static final String K_SHORT_PCT = "short_row_pct"; // Hoehe der folgenden Reihen in %
     private static final String K_PINNED = "pinned"; // Reihenfolge zaehlt -> \n-getrennt
@@ -66,6 +67,14 @@ public final class Settings {
      *  mit variablen Reihenhoehen. Standard AUS (sicher). */
     public static boolean scroll(Context c) { return p(c).getBoolean(K_SCROLL, false); }
     public static void setScroll(Context c, boolean on) { p(c).edit().putBoolean(K_SCROLL, on).apply(); }
+
+    /** Schonendes Auffrischen der Sammlung (nur Scroll-Modus): statt des vollen
+     *  Neuaufbaus (updateAppWidget) nur notifyAppWidgetViewDataChanged. Auf
+     *  MODERNEN Launchern verhindert das das Bild-"Springen" beim Schließen; der
+     *  BlackBerry Launcher ignoriert diesen Weg jedoch (dann aktualisiert sich
+     *  die Sammlung nicht - Schließen wirkungslos). Standard AUS (sicher). */
+    public static boolean gentleRefresh(Context c) { return p(c).getBoolean(K_GENTLE, false); }
+    public static void setGentleRefresh(Context c, boolean on) { p(c).edit().putBoolean(K_GENTLE, on).apply(); }
 
     public static int maxTiles(Context c) { return p(c).getInt(K_MAX_TILES, 12); }
     public static void setMaxTiles(Context c, int n) { p(c).edit().putInt(K_MAX_TILES, clamp(n, 4, 100)).apply(); }
