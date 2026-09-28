@@ -5,6 +5,16 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.20
+- Dritter Auffrisch-Modus (Hybrid) als Zusatzschalter „Beim Schließen voll
+  auffrischen“ unter „Schonend auffrischen“: Öffnen/Scrollen/Benachrichtigungen
+  bleiben flüssig (schonend), nur das ✕ nimmt den vollen, zuverlässigen Weg.
+  Das ist auf Launchern, die das schonende Auffrischen nur unzuverlässig annehmen
+  (BlackBerry Launcher), ein zuverlässiges Schließen – und weckt die Sammlung
+  wieder auf, sodass das schonende Auffrischen danach wieder greift. So gibt es
+  jetzt drei Wege: voll (immer zuverlässig, ruckelt), schonend (flüssig, auf
+  manchen Launchern unzuverlässig) und hybrid (flüssig, Schließen zuverlässig).
+
 ## 0.19
 - Neue Option „Schonend auffrischen (moderne Launcher)“ (Einstellungen, nur im
   Scroll-Modus): aktualisiert die Kacheln über notifyAppWidgetViewDataChanged,

@@ -34,7 +34,9 @@
     <string name="cfg_scroll">  Scrolling (more tiles than fit)</string>
     <string name="cfg_scroll_warn">Note: on older launchers (e.g. the BlackBerry Launcher) tile image and name may get swapped. If that happens, turn scrolling off again – then the fixed layout with variable row heights applies (always correct, but not scrollable).</string>
     <string name="cfg_gentle">  Gentle refresh (modern launchers)</string>
-    <string name="cfg_gentle_warn">Scrolling only: updates the tiles without rebuilding the collection – on modern launchers this removes the image “jumping” when closing a tile. Note: some launchers (incl. the BlackBerry Launcher) ignore it – then tiles can no longer be closed and star/image will not update. If that happens, turn it off again.</string>
+    <string name="cfg_gentle_warn">Scrolling only: updates the tiles without rebuilding the collection – on modern launchers this removes the image “jumping” when closing a tile. Note: some launchers (incl. the BlackBerry Launcher) accept it only unreliably – then, over time, tiles can no longer be closed. If that happens, enable the sub-option below or turn gentle refresh off.</string>
+    <string name="cfg_gentle_close">  Full refresh on close</string>
+    <string name="cfg_gentle_close_hint">For launchers like the BlackBerry Launcher: opening/scrolling/notifications stay smooth, but the ✕ takes the reliable full path (a short jump on close) and wakes the collection back up. Not needed on modern launchers (nothing jumps there).</string>
     <string name="cfg_autoheight">  Match tile format to the screen automatically</string>
     <string name="cfg_columns">Columns</string>
     <string name="cfg_height">Tile height (dp) – smaller = more visible (only when not automatic)</string>

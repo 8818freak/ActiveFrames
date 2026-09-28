@@ -34,7 +34,9 @@
     <string name="cfg_scroll">  Scrollen (mehr Kacheln als sichtbar)</string>
     <string name="cfg_scroll_warn">Achtung: Auf älteren Launchern (z. B. dem BlackBerry Launcher) können dabei Bild und Name der Kacheln vertauscht werden. Tritt das auf, Scrollen wieder ausschalten – dann gilt die feste Darstellung mit variablen Reihenhöhen (immer korrekt, aber nicht scrollbar).</string>
     <string name="cfg_gentle">  Schonend auffrischen (moderne Launcher)</string>
-    <string name="cfg_gentle_warn">Nur mit Scrollen: aktualisiert die Kacheln, ohne die Sammlung neu aufzubauen – auf modernen Launchern verschwindet dadurch das Bild-„Springen“ beim Schließen. Achtung: Manche Launcher (u. a. der BlackBerry Launcher) ignorieren das – dann lässt sich keine Kachel mehr schließen und Stern/Bild aktualisieren nicht. Tritt das auf, wieder ausschalten.</string>
+    <string name="cfg_gentle_warn">Nur mit Scrollen: aktualisiert die Kacheln, ohne die Sammlung neu aufzubauen – auf modernen Launchern verschwindet dadurch das Bild-„Springen“ beim Schließen. Achtung: Manche Launcher (u. a. der BlackBerry Launcher) nehmen das nur unzuverlässig an – dann lässt sich mit der Zeit keine Kachel mehr schließen. Tritt das auf, den Zusatz unten einschalten oder Schonend wieder ausschalten.</string>
+    <string name="cfg_gentle_close">  Beim Schließen voll auffrischen</string>
+    <string name="cfg_gentle_close_hint">Für Launcher wie den BlackBerry Launcher: Öffnen/Scrollen/Benachrichtigungen bleiben flüssig, aber das ✕ nimmt den zuverlässigen vollen Weg (ruckelt beim Schließen kurz) und weckt die Sammlung wieder auf. Auf modernen Launchern nicht nötig (dort ruckelt gar nichts).</string>
     <string name="cfg_autoheight">  Kachelformat automatisch an Bildschirm anpassen</string>
     <string name="cfg_columns">Spalten</string>
     <string name="cfg_height">Kachelhöhe (dp) – kleiner = mehr sichtbar (nur wenn nicht automatisch)</string>

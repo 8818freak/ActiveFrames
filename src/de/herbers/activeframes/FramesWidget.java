@@ -51,7 +51,18 @@ public class FramesWidget extends AppWidgetProvider {
             if (pkg == null) return;
             if (intent.getBooleanExtra(EXTRA_DISMISS, false)) {
                 ImageStore.markDismissed(ctx, pkg);
-                refreshData(ctx);
+                // Hybrid: Beim Schließen den VOLLEN Weg nehmen, wenn schonendes
+                // Auffrischen aktiv ist und "Beim Schließen voll auffrischen"
+                // gewählt wurde. Das ist auf Launchern, die das schonende
+                // Auffrischen nur unzuverlässig annehmen (BlackBerry Launcher),
+                // ein zuverlässiges Schließen und weckt die Sammlung wieder auf,
+                // sodass das schonende Auffrischen danach wieder greift.
+                if (Settings.scroll(ctx) && Settings.gentleRefresh(ctx)
+                        && Settings.gentleFullClose(ctx)) {
+                    rebuildAll(ctx);
+                } else {
+                    refreshData(ctx);
+                }
                 return;
             }
             ImageStore.clearUnread(ctx, pkg);

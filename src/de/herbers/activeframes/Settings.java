@@ -24,6 +24,7 @@ public final class Settings {
     private static final String K_AUTO_HEIGHT = "auto_height"; // Kachelhoehe = Bildschirmformat
     private static final String K_SCROLL = "scroll"; // scrollbare Sammlung statt fester Raster
     private static final String K_GENTLE = "gentle_refresh"; // schonendes Auffrischen (moderne Launcher)
+    private static final String K_GENTLE_FULLCLOSE = "gentle_full_close"; // Hybrid: Schließen voll auffrischen
     private static final String K_BIG_ROWS = "big_rows"; // wie viele obere Reihen in voller Hoehe
     private static final String K_SHORT_PCT = "short_row_pct"; // Hoehe der folgenden Reihen in %
     private static final String K_PINNED = "pinned"; // Reihenfolge zaehlt -> \n-getrennt
@@ -75,6 +76,16 @@ public final class Settings {
      *  die Sammlung nicht - Schließen wirkungslos). Standard AUS (sicher). */
     public static boolean gentleRefresh(Context c) { return p(c).getBoolean(K_GENTLE, false); }
     public static void setGentleRefresh(Context c, boolean on) { p(c).edit().putBoolean(K_GENTLE, on).apply(); }
+
+    /** Hybrid (nur bei „Schonend auffrischen"): Öffnen/Scrollen/Benachrichti-
+     *  gungen schonend (flüssig), aber das Schließen (✕) nimmt den vollen
+     *  updateAppWidget-Weg. Das ist auf Launchern, die das schonende Auffrischen
+     *  nur unzuverlässig annehmen (BlackBerry Launcher), zuverlässig UND weckt
+     *  die Sammlung wieder auf, sodass das schonende Auffrischen danach wieder
+     *  greift. Preis: das ✕ ruckelt kurz. Standard AUS (auf modernen Launchern
+     *  ist reines Schonen besser - dort ruckelt gar nichts). */
+    public static boolean gentleFullClose(Context c) { return p(c).getBoolean(K_GENTLE_FULLCLOSE, false); }
+    public static void setGentleFullClose(Context c, boolean on) { p(c).edit().putBoolean(K_GENTLE_FULLCLOSE, on).apply(); }
 
     public static int maxTiles(Context c) { return p(c).getInt(K_MAX_TILES, 12); }
     public static void setMaxTiles(Context c, int n) { p(c).edit().putInt(K_MAX_TILES, clamp(n, 4, 100)).apply(); }
