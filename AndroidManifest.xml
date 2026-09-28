@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.herbers.activeframes"
-    android:versionCode="10"
-    android:versionName="0.10">
+    android:versionCode="11"
+    android:versionName="0.11">
 
     <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="34" />
 
@@ -72,6 +72,17 @@
             android:name=".FrameImageProvider"
             android:authorities="de.herbers.activeframes.frames"
             android:exported="false"
+            android:grantUriPermissions="true" />
+
+        <!-- Datenkanal fuer ein zweites, natives Widget in EdgeTab (Widget 2):
+             liefert Kachel-Reihenfolge, Sterne und Bilder und nimmt "geoeffnet"/
+             "geschlossen" zurueck. Exportiert, aber intern streng auf EdgeTab
+             beschraenkt (siehe FramesDataProvider) - keine eigene Berechtigung
+             noetig, kein fremder Zugriff moeglich. -->
+        <provider
+            android:name=".FramesDataProvider"
+            android:authorities="de.herbers.activeframes.data"
+            android:exported="true"
             android:grantUriPermissions="true" />
 
         <!-- Faengt Benachrichtigungen ab: roter Stern + letztes Bild je App -->

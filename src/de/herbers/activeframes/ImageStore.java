@@ -32,6 +32,10 @@ final class ImageStore {
         return pkg.replaceAll("[^A-Za-z0-9._-]", "_") + ".png";
     }
 
+    /** Dateiname des Kachelbilds je Paket - fuer den Datenkanal an ein zweites,
+     *  natives Widget in einer anderen App (EdgeTab, siehe FramesDataProvider). */
+    static String fileNameFor(String pkg) { return fileName(pkg); }
+
     private static File file(Context c, String pkg) {
         return new File(dir(c), fileName(pkg));
     }

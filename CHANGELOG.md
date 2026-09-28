@@ -5,6 +5,16 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.11
+- Datenkanal für „Widget 2": Ein neuer, streng abgesicherter Anbieter
+  (FramesDataProvider) stellt die Kachel-Reihenfolge, die Sterne und die
+  Bilder einer anderen App des Nutzers bereit - gedacht für die native
+  „Aktive Kacheln"-Karte in EdgeTab. So bleibt Active Frames die einzige
+  Datenquelle (mit Nutzungsdaten-/Benachrichtigungs-/Bedienungshilfe-Zugriff);
+  EdgeTab braucht dafür keine eigenen heiklen Berechtigungen und bekommt die
+  echten App-Fotos „geschenkt". Zugriff ausschließlich für EdgeTab (per
+  Paketnamen geprüft), kein fremder Zugriff möglich.
+
 ## 0.10
 - Das Home-Screen-Widget heißt jetzt „Widget 1" (eine native, scrollbare
   Active-Frames-Karte für EdgeTab als „Widget 2" folgt).
