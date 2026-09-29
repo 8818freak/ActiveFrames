@@ -5,6 +5,12 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.28
+- Verbessert: Das Diagnose-Protokoll steht jetzt fest ganz unten, zeigt die
+  neuesten Einträge zuerst, und die Schaltflächen (Anzeigen-Schalter,
+  „löschen“) stehen darüber. Neuer Schalter „Protokoll anzeigen“ blendet es
+  bei Bedarf aus. (Einheitlich in allen Apps.)
+
 ## 0.25
 - Intern: Die Einstellungs-Sicherung nutzt jetzt die gemeinsame Bibliothek
   „herbers-android-common" (Git-Submodul, Klasse de.herbers.common.SettingsBackup)
