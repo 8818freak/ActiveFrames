@@ -5,6 +5,13 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.27
+- Neu: Diagnose-Protokoll mit Absturz-Erfassung (aus der gemeinsamen Bibliothek
+  herbers-android-common, de.herbers.common.DiagLog / Diagnostics) – unerwartete
+  Fehler werden mit vollem Stack festgehalten und lassen sich in der App unter
+  „Diagnose-Protokoll" einsehen/löschen, ohne Kabel. Dieselbe Diagnose wie in
+  EdgeTab und Sucher.
+
 ## 0.26
 - Intern: Die Erkennung einer „echten" Benachrichtigung (für den roten Stern)
   kommt jetzt aus dem gemeinsamen Kern der Bibliothek herbers-android-common

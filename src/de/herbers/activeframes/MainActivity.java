@@ -69,6 +69,27 @@ public class MainActivity extends Activity {
         button(root, getString(R.string.backup_export), this::startBackupExport);
         button(root, getString(R.string.backup_import), this::startBackupImport);
 
+        // Diagnose-Protokoll (gemeinsame Bibliothek) - nur zeigen, wenn etwas
+        // drinsteht (also nach einem Absturz). So sieht man Fehler ohne Kabel.
+        String diag = de.herbers.common.DiagLog.read(this);
+        if (diag != null && !diag.isEmpty()) {
+            section(root, "Diagnose-Protokoll");
+            body(root, "Zuletzt aufgezeichnete Fehler/Abstürze – hilft bei der Fehlersuche ohne Kabel.");
+            TextView log = new TextView(this);
+            log.setText(diag);
+            log.setTextColor(Color.parseColor("#CCCCCC"));
+            log.setTextSize(11);
+            log.setTypeface(android.graphics.Typeface.MONOSPACE);
+            log.setTextIsSelectable(true);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            lp.bottomMargin = dp(6);
+            log.setLayoutParams(lp);
+            root.addView(log);
+            button(root, "Diagnose-Protokoll löschen",
+                    () -> { de.herbers.common.DiagLog.clear(this); buildUi(); });
+        }
+
         section(root, getString(R.string.changelog_title));
         button(root, getString(changelogOpen ? R.string.changelog_hide : R.string.changelog_show),
                 () -> { changelogOpen = !changelogOpen; buildUi(); });
