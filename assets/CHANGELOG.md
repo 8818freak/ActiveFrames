@@ -11,7 +11,11 @@ Benachrichtigung und rotem Stern bei Neuem.
   „löschen“) stehen darüber. Neuer Schalter „Protokoll anzeigen“ blendet es
   bei Bedarf aus. (Einheitlich in allen Apps.)
 
-## 0.29
+## 0.30
+- Aufgeräumt: Die Berechtigungen stehen jetzt NUR noch im aufklappbaren
+  Abschnitt „Berechtigungen“ – mit Erklärung, wofür jede gebraucht wird, und
+  einem Knopf in die passende Systemeinstellung. Die früheren separaten
+  Abschnitte (Reihenfolge/Stern/Fotos) entfallen (keine doppelten Einstellungen).
 - Behoben: Nach einem System-Update / „Cache leeren“ / SD Maid waren die
   Kachelbilder weg. Sie liegen jetzt im persistenten App-Speicher (nicht mehr
   im Cache) und überleben das. Vorhandene Bilder werden einmalig übernommen.

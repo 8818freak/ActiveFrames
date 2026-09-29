@@ -22,9 +22,8 @@ import android.widget.Toast;
  *  gungszugriff fuer Stern + Kachelbild). */
 public class MainActivity extends Activity {
 
-    private TextView usageStatus, notifStatus, accStatus;
     private boolean changelogOpen = false;
-    private boolean permsOpen = false;
+    private Boolean permsOpen = null; // null = noch nicht entschieden (Auto: offen, wenn etwas fehlt)
 
     @Override
     protected void onCreate(Bundle b) {
@@ -43,24 +42,10 @@ public class MainActivity extends Activity {
         title(root, getString(R.string.app_name));
         body(root, getString(R.string.main_intro));
 
-        section(root, getString(R.string.sec_order));
-        body(root, getString(R.string.order_desc));
-        usageStatus = statusLine(root);
-        button(root, getString(R.string.grant_usage), () ->
-                openSettings(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS));
-
-        section(root, getString(R.string.sec_star));
-        body(root, getString(R.string.star_desc));
-        notifStatus = statusLine(root);
-        button(root, getString(R.string.grant_notif), () ->
-                openSettings(android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS));
-
-        section(root, getString(R.string.sec_photos));
-        body(root, getString(R.string.photos_desc));
-        accStatus = statusLine(root);
-        button(root, getString(R.string.grant_acc), () ->
-                openSettings(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS));
-
+        // Berechtigungen: EIN erklaerter, aufklappbarer Abschnitt (keine
+        // doppelten Einstellungen mehr - ersetzt die frueheren Einzelabschnitte
+        // Reihenfolge/Stern/Fotos). Erklaerung, Status und Sprung in die
+        // Systemeinstellung stehen je Berechtigung beisammen.
         permsSection(root);
 
         section(root, getString(R.string.sec_widget));
@@ -134,16 +119,8 @@ public class MainActivity extends Activity {
     }
 
     private void updateStatuses() {
-        if (usageStatus == null) return;
-        boolean usage = UsageProvider.hasAccess(this);
-        usageStatus.setText(getString(usage ? R.string.status_granted : R.string.status_denied));
-        usageStatus.setTextColor(usage ? Color.parseColor("#5BD68A") : Color.parseColor("#E0533A"));
-        boolean notif = notifAccess(this);
-        notifStatus.setText(getString(notif ? R.string.status_granted : R.string.status_denied));
-        notifStatus.setTextColor(notif ? Color.parseColor("#5BD68A") : Color.parseColor("#E0533A"));
-        boolean acc = accAccess(this);
-        accStatus.setText(getString(acc ? R.string.acc_on : R.string.acc_off));
-        accStatus.setTextColor(acc ? Color.parseColor("#5BD68A") : Color.parseColor("#99AAB8"));
+        // Der Berechtigungs-Status steht jetzt im aufklappbaren Abschnitt
+        // (permsSection); hier nur noch das Widget auffrischen.
         FramesWidget.refreshData(this);
     }
 
@@ -152,32 +129,43 @@ public class MainActivity extends Activity {
      *  die passende Systemeinstellung. Dieselbe Definition wie die Erinnerung
      *  (Perms.list). */
     private void permsSection(LinearLayout root) {
+        java.util.List<de.herbers.common.PermReminder.Perm> perms = Perms.list(this);
+        boolean anyMissing = false;
+        for (de.herbers.common.PermReminder.Perm perm : perms) if (!perm.granted) anyMissing = true;
+        // Auto: offen, solange etwas fehlt (Einrichtung sichtbar); sonst zu.
+        boolean open = (permsOpen != null) ? permsOpen : anyMissing;
+
         TextView head = new TextView(this);
-        head.setText((permsOpen ? "▾ " : "▸ ") + "Berechtigungen");
+        head.setText((open ? "▾ " : "▸ ") + "Berechtigungen");
         head.setTextColor(Color.parseColor("#2E9BE6"));
         head.setTextSize(16);
         head.setPadding(0, dp(16), 0, dp(8));
-        head.setOnClickListener(v -> { permsOpen = !permsOpen; buildUi(); });
+        final boolean cur = open;
+        head.setOnClickListener(v -> { permsOpen = !cur; buildUi(); });
         root.addView(head);
-        if (!permsOpen) return;
-        for (de.herbers.common.PermReminder.Perm perm : Perms.list(this)) {
-            LinearLayout rowl = new LinearLayout(this);
-            rowl.setOrientation(LinearLayout.HORIZONTAL);
-            rowl.setPadding(dp(6), dp(8), dp(6), dp(8));
-            rowl.setClickable(true);
+        if (!open) return;
+
+        for (de.herbers.common.PermReminder.Perm perm : perms) {
             TextView name = new TextView(this);
-            name.setText((perm.granted ? "✓  " : "✗  ") + perm.label);
+            name.setText((perm.granted ? "✓  " : "✗  ") + perm.label
+                    + (perm.granted ? "" : "  –  fehlt"));
             name.setTextColor(perm.granted ? Color.parseColor("#5BD68A") : Color.parseColor("#E0533A"));
-            name.setTextSize(14);
-            name.setLayoutParams(new LinearLayout.LayoutParams(0,
-                    LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-            rowl.addView(name);
-            TextView go = new TextView(this);
-            go.setText(perm.granted ? "ändern ›" : "erteilen ›");
-            go.setTextColor(Color.parseColor("#8899AA"));
-            go.setTextSize(13);
-            rowl.addView(go);
-            rowl.setOnClickListener(v -> {
+            name.setTextSize(15);
+            name.setPadding(dp(4), dp(10), dp(4), dp(2));
+            root.addView(name);
+
+            if (perm.explanation != null && !perm.explanation.isEmpty()) {
+                TextView why = new TextView(this);
+                why.setText(perm.explanation);
+                why.setTextColor(Color.parseColor("#99AAB8"));
+                why.setTextSize(12.5f);
+                why.setPadding(dp(4), 0, dp(4), dp(4));
+                root.addView(why);
+            }
+
+            Button go = new Button(this);
+            go.setText(perm.granted ? "In den Einstellungen ändern" : "Jetzt erteilen");
+            go.setOnClickListener(v -> {
                 try {
                     Intent i = perm.settings;
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -186,7 +174,7 @@ public class MainActivity extends Activity {
                     Toast.makeText(this, "Einstellung nicht verfügbar", Toast.LENGTH_SHORT).show();
                 }
             });
-            root.addView(rowl);
+            root.addView(go);
         }
     }
 

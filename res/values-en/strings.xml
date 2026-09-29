@@ -16,7 +16,7 @@
     <string name="sec_photos">3. Real app photos (optional)</string>
     <string name="photos_desc">Without this, tiles show the latest notification image or the app icon. With accessibility enabled, Active Frames takes a photo of an app\'s state when you open it (true Active Frames look). Images stay on the device only; secure apps (banking) stay black.</string>
     <string name="grant_acc">Accessibility on/off</string>
-    <string name="sec_widget">4. Widget &amp; settings</string>
+    <string name="sec_widget">Widget &amp; settings</string>
     <string name="main_widget_desc">Place the widget on your home screen (long-press an empty spot → Widgets → Active Frames) and resize it freely. Columns, tile format and quick-launch apps are in the gear.</string>
     <string name="open_settings_btn">Open tile settings</string>
 

@@ -16,7 +16,7 @@
     <string name="sec_photos">3. Echte App-Fotos (optional)</string>
     <string name="photos_desc">Ohne dies zeigen die Kacheln das Bild der letzten Benachrichtigung bzw. das App-Symbol. Mit der Bedienungshilfe macht Active Frames beim Öffnen einer App ein Foto ihres Zustands (echte Active-Frames-Optik). Die Bilder bleiben nur auf dem Gerät; sichere Apps (Banking) bleiben schwarz.</string>
     <string name="grant_acc">Bedienungshilfe ein/aus</string>
-    <string name="sec_widget">4. Widget &amp; Einstellungen</string>
+    <string name="sec_widget">Widget &amp; Einstellungen</string>
     <string name="main_widget_desc">Widget auf den Startbildschirm legen (lange auf eine freie Stelle tippen → Widgets → Active Frames) und frei skalieren. Spaltenzahl, Kachelformat und Schnellstart-Apps im Zahnrad.</string>
     <string name="open_settings_btn">Kachel-Einstellungen öffnen</string>
 
