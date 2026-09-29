@@ -167,6 +167,17 @@ final class ImageStore {
         return b;
     }
 
+    /** Alle gespeicherten Kachelbilder UND Logo-Kacheln loeschen (der Speicher-
+     *  Cache wird geleert). Kacheln zeigen danach wieder nur das App-Symbol und
+     *  bauen sich beim naechsten Oeffnen/bei neuen Benachrichtigungen neu auf. */
+    static void clearAllImages(Context c) {
+        try {
+            File[] files = dir(c).listFiles();
+            if (files != null) for (File f : files) { try { f.delete(); } catch (Throwable ignored) {} }
+        } catch (Throwable ignored) {}
+        try { SCALED_CACHE.evictAll(); } catch (Throwable ignored) {}
+    }
+
     private static Bitmap scaleDown(Bitmap b, int maxEdge) {
         int w = b.getWidth(), h = b.getHeight();
         int longest = Math.max(w, h);

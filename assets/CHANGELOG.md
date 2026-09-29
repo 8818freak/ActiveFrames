@@ -11,6 +11,11 @@ Benachrichtigung und rotem Stern bei Neuem.
   „löschen“) stehen darüber. Neuer Schalter „Protokoll anzeigen“ blendet es
   bei Bedarf aus. (Einheitlich in allen Apps.)
 
+## 0.31
+- Neu: Unter „Berechtigungen“ lassen sich die gespeicherten Kachelbilder
+  (aus Benachrichtigungen und Bildschirmfotos) gezielt löschen – mit
+  Sicherheitsabfrage. Die Kacheln bauen sich danach von selbst wieder auf.
+
 ## 0.30
 - Aufgeräumt: Die Berechtigungen stehen jetzt NUR noch im aufklappbaren
   Abschnitt „Berechtigungen“ – mit Erklärung, wofür jede gebraucht wird, und

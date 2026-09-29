@@ -176,6 +176,38 @@ public class MainActivity extends Activity {
             });
             root.addView(go);
         }
+
+        // Zugehoerige, gespeicherte Daten: die Kachelbilder (aus Benachrichtigungen
+        // und Bildschirmfotos). Gezielt loeschbar, mit Sicherheitsabfrage.
+        TextView clearHint = new TextView(this);
+        clearHint.setText("Gespeicherte Kachelbilder (aus Benachrichtigungen und Bildschirmfotos):");
+        clearHint.setTextColor(Color.parseColor("#8899AA"));
+        clearHint.setTextSize(12);
+        clearHint.setPadding(dp(4), dp(12), dp(4), dp(2));
+        root.addView(clearHint);
+        Button delImgs = new Button(this);
+        delImgs.setText("Kachelbilder löschen");
+        delImgs.setTextColor(Color.parseColor("#E06666"));
+        delImgs.setOnClickListener(v -> confirmClear("Kachelbilder löschen", () -> {
+            ImageStore.clearAllImages(this);
+            FramesWidget.rebuildAll(this);
+        }));
+        root.addView(delImgs);
+    }
+
+    /** Sicherheitsabfrage vor dem Loeschen. */
+    private void confirmClear(String what, Runnable action) {
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Wirklich löschen?")
+                .setMessage("„" + what + "“ – das lässt sich nicht rückgängig machen. "
+                        + "Die Kacheln bauen sich beim nächsten Öffnen/bei neuen Benachrichtigungen neu auf.")
+                .setNegativeButton("Abbrechen", null)
+                .setPositiveButton("Löschen", (dlg, w) -> {
+                    try { action.run(); Toast.makeText(this, "Gelöscht.", Toast.LENGTH_SHORT).show(); }
+                    catch (Throwable t) {}
+                    buildUi();
+                })
+                .show();
     }
 
     static boolean notifAccess(Context c) {
