@@ -63,6 +63,10 @@ public class FramesNotificationListener extends NotificationListenerService {
             }
 
             FramesWidget.refreshData(this);
+            // Nebenbei pruefen, ob die Bedienungshilfe (Kachel-Fotos) noch da
+            // ist - falls ein OS-Update sie entzogen hat, hier erinnern (die App
+            // muss dafuer nicht offen sein). Billig: nur einmal, bis wieder da.
+            Perms.checkReminders(this);
         } catch (Throwable ignored) {}
     }
 
@@ -81,19 +85,11 @@ public class FramesNotificationListener extends NotificationListenerService {
     }
 
     private Bitmap extractImage(Notification n) {
-        try {
-            Bundle x = n.extras;
-            if (x != null) {
-                Object pic = x.getParcelable(Notification.EXTRA_PICTURE); // BigPictureStyle
-                if (pic instanceof Bitmap) return (Bitmap) pic;
-            }
-            Icon large = n.getLargeIcon(); // Kontaktfoto / Albumcover / grosses Symbol
-            if (large != null) {
-                Drawable d = large.loadDrawable(this);
-                Bitmap b = AppInfoCache.toBitmap(d, 0);
-                if (b != null) return b;
-            }
-        } catch (Throwable ignored) {}
-        return null;
+        // Gemeinsame Bibliothek: deckt BigPictureStyle (Bitmap UND das
+        // Icon-Format ab Android 12, EXTRA_PICTURE_ICON) sowie das grosse
+        // Icon/Avatar ab - eine gepflegte Quelle statt einer eigenen Kopie.
+        Bitmap pic = Notifications.bigPicture(this, n);
+        if (pic != null) return pic;
+        return Notifications.largeIcon(this, n);
     }
 }

@@ -26,7 +26,7 @@ public class FrameImageProvider extends ContentProvider {
     public ParcelFileDescriptor openFile(Uri uri, String mode) throws FileNotFoundException {
         String name = uri.getLastPathSegment();
         if (name == null || getContext() == null) throw new FileNotFoundException();
-        File dir = new File(getContext().getCacheDir(), "frames");
+        File dir = new File(getContext().getFilesDir(), "frames");
         File f = new File(dir, name);
         try {
             // Nur Dateien innerhalb des frames-Verzeichnisses zulassen.

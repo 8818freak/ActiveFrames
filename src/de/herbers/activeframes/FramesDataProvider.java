@@ -69,7 +69,7 @@ public class FramesDataProvider extends ContentProvider {
         List<String> seg = uri.getPathSegments();
         if (seg.size() < 2 || !"image".equals(seg.get(0))) throw new FileNotFoundException();
         String name = seg.get(1);
-        File dir = new File(getContext().getCacheDir(), "frames");
+        File dir = new File(getContext().getFilesDir(), "frames");
         File f = new File(dir, name);
         try {
             // Nur Dateien innerhalb des frames-Verzeichnisses zulassen.

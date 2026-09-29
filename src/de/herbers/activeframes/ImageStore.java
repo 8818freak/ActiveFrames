@@ -23,8 +23,31 @@ final class ImageStore {
     private static final String K_DISMISSED = "dismissed";
 
     private static File dir(Context c) {
-        File d = new File(c.getCacheDir(), "frames");
+        // Persistenter Speicher (getFilesDir), NICHT Cache: sonst wischt ein
+        // OS-Update / "Cache leeren" / SD Maid alle Kachelbilder weg (genau das
+        // ist passiert). Bounded durch die Zahl der Apps, also unkritisch.
+        File d = new File(c.getFilesDir(), "frames");
         if (!d.exists()) d.mkdirs();
+        // Einmalige Migration: evtl. noch vorhandene Bilder aus dem alten
+        // Cache-Ordner heruebernehmen (best effort, nur was der Cache-Purge
+        // uebrig liess).
+        try {
+            File old = new File(c.getCacheDir(), "frames");
+            File[] olds = old.isDirectory() ? old.listFiles() : null;
+            if (olds != null) {
+                for (File o : olds) {
+                    File t = new File(d, o.getName());
+                    if (!t.exists()) {
+                        try (java.io.FileInputStream in = new java.io.FileInputStream(o);
+                             FileOutputStream out = new FileOutputStream(t)) {
+                            byte[] buf = new byte[8192]; int n;
+                            while ((n = in.read(buf)) > 0) out.write(buf, 0, n);
+                        }
+                    }
+                    o.delete();
+                }
+            }
+        } catch (Throwable ignored) {}
         return d;
     }
 

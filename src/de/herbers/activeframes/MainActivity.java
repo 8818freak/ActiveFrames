@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
 
     private TextView usageStatus, notifStatus, accStatus;
     private boolean changelogOpen = false;
+    private boolean permsOpen = false;
 
     @Override
     protected void onCreate(Bundle b) {
@@ -59,6 +60,8 @@ public class MainActivity extends Activity {
         accStatus = statusLine(root);
         button(root, getString(R.string.grant_acc), () ->
                 openSettings(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS));
+
+        permsSection(root);
 
         section(root, getString(R.string.sec_widget));
         body(root, getString(R.string.main_widget_desc));
@@ -118,6 +121,16 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         updateStatuses();
+        // Ab Android 13 braucht das Posten von Benachrichtigungen eine
+        // Laufzeit-Berechtigung - fuer die Bedienungshilfe-Erinnerung einmal
+        // anfragen. Danach pruefen und ggf. erinnern/zurueckziehen.
+        if (android.os.Build.VERSION.SDK_INT >= 33
+                && checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                        != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            try { requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 909); }
+            catch (Throwable ignored) {}
+        }
+        Perms.checkReminders(this);
     }
 
     private void updateStatuses() {
@@ -132,6 +145,49 @@ public class MainActivity extends Activity {
         accStatus.setText(getString(acc ? R.string.acc_on : R.string.acc_off));
         accStatus.setTextColor(acc ? Color.parseColor("#5BD68A") : Color.parseColor("#99AAB8"));
         FramesWidget.refreshData(this);
+    }
+
+    /** Aufklappbarer Berechtigungs-Abschnitt (Dreieck ▸/▾): listet alle
+     *  Berechtigungen dieser App mit Status; ein Tipp auf eine Zeile fuehrt in
+     *  die passende Systemeinstellung. Dieselbe Definition wie die Erinnerung
+     *  (Perms.list). */
+    private void permsSection(LinearLayout root) {
+        TextView head = new TextView(this);
+        head.setText((permsOpen ? "▾ " : "▸ ") + "Berechtigungen");
+        head.setTextColor(Color.parseColor("#2E9BE6"));
+        head.setTextSize(16);
+        head.setPadding(0, dp(16), 0, dp(8));
+        head.setOnClickListener(v -> { permsOpen = !permsOpen; buildUi(); });
+        root.addView(head);
+        if (!permsOpen) return;
+        for (de.herbers.common.PermReminder.Perm perm : Perms.list(this)) {
+            LinearLayout rowl = new LinearLayout(this);
+            rowl.setOrientation(LinearLayout.HORIZONTAL);
+            rowl.setPadding(dp(6), dp(8), dp(6), dp(8));
+            rowl.setClickable(true);
+            TextView name = new TextView(this);
+            name.setText((perm.granted ? "✓  " : "✗  ") + perm.label);
+            name.setTextColor(perm.granted ? Color.parseColor("#5BD68A") : Color.parseColor("#E0533A"));
+            name.setTextSize(14);
+            name.setLayoutParams(new LinearLayout.LayoutParams(0,
+                    LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+            rowl.addView(name);
+            TextView go = new TextView(this);
+            go.setText(perm.granted ? "ändern ›" : "erteilen ›");
+            go.setTextColor(Color.parseColor("#8899AA"));
+            go.setTextSize(13);
+            rowl.addView(go);
+            rowl.setOnClickListener(v -> {
+                try {
+                    Intent i = perm.settings;
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(i);
+                } catch (Throwable t) {
+                    Toast.makeText(this, "Einstellung nicht verfügbar", Toast.LENGTH_SHORT).show();
+                }
+            });
+            root.addView(rowl);
+        }
     }
 
     static boolean notifAccess(Context c) {

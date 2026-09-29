@@ -11,6 +11,20 @@ Benachrichtigung und rotem Stern bei Neuem.
   „löschen“) stehen darüber. Neuer Schalter „Protokoll anzeigen“ blendet es
   bei Bedarf aus. (Einheitlich in allen Apps.)
 
+## 0.29
+- Behoben: Nach einem System-Update / „Cache leeren“ / SD Maid waren die
+  Kachelbilder weg. Sie liegen jetzt im persistenten App-Speicher (nicht mehr
+  im Cache) und überleben das. Vorhandene Bilder werden einmalig übernommen.
+- Neu: Erinnerung, wenn eine einmal erteilte Berechtigung fehlt (z. B. die
+  Bedienungshilfe für die Kachel-Fotos, die Android bei Updates gern entzieht).
+  Die Meldung führt direkt zum Wiedererteilen und lässt sich „Ignorieren“
+  (falls gewollt). Gemeinsame Funktion für alle Apps.
+- Neu: Aufklappbarer Abschnitt „Berechtigungen“ in den Einstellungen (Dreieck
+  ▸/▾) – zeigt alle Berechtigungen mit Status; ein Tipp führt je Berechtigung
+  in die passende Systemeinstellung.
+- Intern: Die Bild-Erkennung aus Benachrichtigungen kommt jetzt aus der
+  gemeinsamen Bibliothek (deckt auch das neuere Bild-Format ab Android 12 ab).
+
 ## 0.25
 - Intern: Die Einstellungs-Sicherung nutzt jetzt die gemeinsame Bibliothek
   „herbers-android-common" (Git-Submodul, Klasse de.herbers.common.SettingsBackup)

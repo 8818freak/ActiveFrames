@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.herbers.activeframes"
-    android:versionCode="28"
-    android:versionName="0.28">
+    android:versionCode="29"
+    android:versionName="0.29">
 
     <uses-sdk android:minSdkVersion="29" android:targetSdkVersion="34" />
 
@@ -10,6 +10,8 @@
          Laufzeit-Dialog, sondern ein eigener System-Bildschirm ("Nutzungsdaten-
          zugriff"), den der Nutzer einmal freischaltet. -->
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" />
+    <!-- Fuer die Erinnerung, wenn die Bedienungshilfe-Berechtigung fehlt (ab Android 13). -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- Sichtbarkeit startbarer Apps (Android 11+): sonst lieferte der
          PackageManager weder Symbol/Name noch einen Start-Intent fremder Apps. -->
@@ -110,5 +112,7 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_config" />
         </service>
+        <!-- "Ignorieren" der Berechtigungs-Erinnerung (gemeinsame Bibliothek). -->
+        <receiver android:name="de.herbers.common.PermReminderReceiver" android:exported="false" />
     </application>
 </manifest>
