@@ -144,70 +144,16 @@ public final class Settings {
     // NICHT Teil der Sicherung: sie bauen sich von selbst wieder auf.
     private static final String BACKUP_HEADER = "ActiveFrames-Backup 1";
 
+    // Delegiert an die gemeinsame Bibliothek (de.herbers.common.SettingsBackup,
+    // Git-Submodul common/) - dieselbe Logik in EdgeTab/Sucher/ActiveFrames,
+    // eine Quelle der Wahrheit.
     public static String exportText(Context c) {
-        StringBuilder sb = new StringBuilder(BACKUP_HEADER).append('\n');
-        for (Map.Entry<String, ?> e : p(c).getAll().entrySet()) {
-            String key = e.getKey();
-            Object v = e.getValue();
-            if (v instanceof String) {
-                sb.append("s").append(key).append('').append(b64((String) v)).append('\n');
-            } else if (v instanceof Boolean) {
-                sb.append("b").append(key).append('').append(v).append('\n');
-            } else if (v instanceof Integer) {
-                sb.append("i").append(key).append('').append(v).append('\n');
-            } else if (v instanceof Long) {
-                sb.append("l").append(key).append('').append(v).append('\n');
-            } else if (v instanceof Float) {
-                sb.append("f").append(key).append('').append(v).append('\n');
-            } else if (v instanceof Set) {
-                StringBuilder joined = new StringBuilder();
-                for (Object s : (Set<?>) v) joined.append(String.valueOf(s)).append('');
-                sb.append("x").append(key).append('').append(b64(joined.toString())).append('\n');
-            }
-        }
-        return sb.toString();
+        return de.herbers.common.SettingsBackup.export(p(c), BACKUP_HEADER);
     }
 
     /** Ersetzt den GESAMTEN Einstellungsstand durch eine Sicherung. Liefert
      *  false bei erkennbar falschem/beschaedigtem Format, ohne etwas zu aendern. */
     public static boolean importText(Context c, String text) {
-        if (text == null || !text.startsWith(BACKUP_HEADER)) return false;
-        SharedPreferences.Editor ed = p(c).edit().clear();
-        try {
-            for (String line : text.split("\n", -1)) {
-                if (line.isEmpty()) continue;
-                String[] f = line.split("", -1);
-                if (f.length < 2) continue;
-                String type = f[0].substring(0, 1);
-                String key = f[0].substring(1);
-                String val = f[1];
-                switch (type) {
-                    case "s": ed.putString(key, unb64(val)); break;
-                    case "b": ed.putBoolean(key, Boolean.parseBoolean(val)); break;
-                    case "i": ed.putInt(key, Integer.parseInt(val)); break;
-                    case "l": ed.putLong(key, Long.parseLong(val)); break;
-                    case "f": ed.putFloat(key, Float.parseFloat(val)); break;
-                    case "x":
-                        Set<String> set = new HashSet<>();
-                        for (String part : unb64(val).split("", -1)) if (!part.isEmpty()) set.add(part);
-                        ed.putStringSet(key, set);
-                        break;
-                    default: break;
-                }
-            }
-        } catch (Exception e) {
-            return false;
-        }
-        ed.apply();
-        return true;
-    }
-
-    private static String b64(String s) {
-        return android.util.Base64.encodeToString(s.getBytes(StandardCharsets.UTF_8),
-                android.util.Base64.NO_WRAP);
-    }
-    private static String unb64(String s) {
-        return new String(android.util.Base64.decode(s, android.util.Base64.NO_WRAP),
-                StandardCharsets.UTF_8);
+        return de.herbers.common.SettingsBackup.importInto(p(c), BACKUP_HEADER, text);
     }
 }

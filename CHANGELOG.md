@@ -5,6 +5,12 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.25
+- Intern: Die Einstellungs-Sicherung nutzt jetzt die gemeinsame Bibliothek
+  „herbers-android-common" (Git-Submodul, Klasse de.herbers.common.SettingsBackup)
+  statt einer eigenen Kopie – dieselbe, gepflegte Logik wie in EdgeTab und
+  Sucher. Das Sicherungsformat bleibt unverändert. Keine sichtbare Änderung.
+
 ## 0.24
 - Scroll-Modus auf dem BlackBerry Launcher gründlich repariert (auf dem Gerät
   getestet). Bisher recycelte der BB Launcher die Sammlungs-Kacheln fehlerhaft:
