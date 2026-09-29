@@ -11,6 +11,10 @@ Benachrichtigung und rotem Stern bei Neuem.
   „löschen“) stehen darüber. Neuer Schalter „Protokoll anzeigen“ blendet es
   bei Bedarf aus. (Einheitlich in allen Apps.)
 
+## 0.32
+- Behoben: Häkchen-Kästchen waren auf dunklem Grund kaum sichtbar (schwarzer
+  Rahmen); jetzt mit sichtbarem blauem Rahmen.
+
 ## 0.31
 - Neu: Unter „Berechtigungen“ lassen sich die gespeicherten Kachelbilder
   (aus Benachrichtigungen und Bildschirmfotos) gezielt löschen – mit

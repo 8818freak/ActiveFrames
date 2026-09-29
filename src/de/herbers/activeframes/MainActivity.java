@@ -75,6 +75,7 @@ public class MainActivity extends Activity {
         section(root, "Diagnose-Protokoll");
         body(root, "Zuletzt aufgezeichnete Fehler/Abstürze – hilft bei der Fehlersuche ohne Kabel. Neueste Einträge oben.");
         CheckBox showLog = new CheckBox(this);
+        showLog.setButtonTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.parseColor("#2E9BE6")));
         showLog.setText("  Protokoll anzeigen");
         showLog.setTextColor(Color.WHITE);
         showLog.setChecked(de.herbers.common.DiagLog.isDisplayEnabled(this));
