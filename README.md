@@ -45,7 +45,14 @@ letzten Benachrichtigung, roter Stern bei Neuem.*
 - **Optional real app photos**: with the accessibility service enabled, a tile
   can show a real screenshot of the app's last state (true Active-Frames look).
   Apps that block screenshots (banking, BBMe) show their logo instead of a
-  black tile. Images stay on the device only.
+  black tile. Images stay on the device only, in persistent app storage — so
+  they survive an OS update / cache clear / SD Maid (they used to live in the
+  cache and vanished).
+- **Permissions section**: a collapsible list in the settings shows each
+  permission, what it is for and its status, with a jump to the matching system
+  setting; the saved tile images can be cleared there. If a once-granted
+  permission goes missing (e.g. the accessibility service after an OS update),
+  Active Frames reminds you with a notification offering to re-grant or ignore.
 - **Second, native widget for [EdgeTab](https://github.com/8818freak/EdgeTab)
   ("Widget 2")**: an "Active Frames" card inside EdgeTab's edge panel that reads
   its data (order, stars, images) from Active Frames over a private, EdgeTab-
