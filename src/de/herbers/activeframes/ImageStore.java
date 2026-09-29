@@ -51,6 +51,10 @@ final class ImageStore {
         return d;
     }
 
+    /** Der Ordner mit allen Kachelbildern (und Logos) - fuer die Sicherung, die
+     *  diese Bilder mitnimmt (siehe Backup). */
+    static File framesDir(Context c) { return dir(c); }
+
     private static String fileName(String pkg) {
         return pkg.replaceAll("[^A-Za-z0-9._-]", "_") + ".png";
     }

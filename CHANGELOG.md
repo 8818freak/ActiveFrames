@@ -5,6 +5,13 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.33
+- Verbessert: **Die Sicherung nimmt jetzt auch die Kachelbilder mit** (als
+  Zip: Einstellungen + Bilder). Nach dem Wiederherstellen sind die Kacheln
+  sofort wieder gefüllt, statt erst bei der nächsten Benachrichtigung
+  nachzuwachsen. Ältere reine Text-Sicherungen (nur Einstellungen) werden beim
+  Wiederherstellen weiterhin erkannt.
+
 ## 0.27
 - Neu: Diagnose-Protokoll mit Absturz-Erfassung (aus der gemeinsamen Bibliothek
   herbers-android-common, de.herbers.common.DiagLog / Diagnostics) – unerwartete

@@ -249,8 +249,8 @@ public class MainActivity extends Activity {
     private void startBackupExport() {
         Intent i = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         i.addCategory(Intent.CATEGORY_OPENABLE);
-        i.setType("text/plain");
-        i.putExtra(Intent.EXTRA_TITLE, "activeframes-sicherung.txt");
+        i.setType("application/zip");
+        i.putExtra(Intent.EXTRA_TITLE, "activeframes-sicherung.zip");
         i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, DASIS_FOLDER);
         try { startActivityForResult(i, REQ_BACKUP_EXPORT); }
         catch (Exception e) { Toast.makeText(this, R.string.backup_bad, Toast.LENGTH_SHORT).show(); }
@@ -259,7 +259,8 @@ public class MainActivity extends Activity {
     private void startBackupImport() {
         Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         i.addCategory(Intent.CATEGORY_OPENABLE);
-        i.setType("text/plain");
+        // Beide zulassen: neue Zip-Sicherung UND alte reine Text-Sicherung.
+        i.setType("*/*");
         i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, DASIS_FOLDER);
         try { startActivityForResult(i, REQ_BACKUP_IMPORT); }
         catch (Exception e) { Toast.makeText(this, R.string.backup_bad, Toast.LENGTH_SHORT).show(); }
@@ -271,7 +272,8 @@ public class MainActivity extends Activity {
         if (req == REQ_BACKUP_EXPORT) {
             if (res == RESULT_OK && data != null && data.getData() != null) {
                 try (java.io.OutputStream out = getContentResolver().openOutputStream(data.getData())) {
-                    out.write(Settings.exportText(this).getBytes("UTF-8"));
+                    // Einstellungen UND Kachelbilder.
+                    Backup.exportZip(this, out);
                     Toast.makeText(this, R.string.backup_saved, Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     Toast.makeText(this, R.string.backup_save_failed, Toast.LENGTH_SHORT).show();
@@ -279,8 +281,10 @@ public class MainActivity extends Activity {
             }
         } else if (req == REQ_BACKUP_IMPORT) {
             if (res == RESULT_OK && data != null && data.getData() != null) {
-                String text = readUri(data.getData());
-                boolean ok = Settings.importText(this, text);
+                boolean ok = false;
+                try (java.io.InputStream in = getContentResolver().openInputStream(data.getData())) {
+                    ok = in != null && Backup.importAuto(this, in);
+                } catch (Exception ignored) {}
                 Toast.makeText(this, getString(ok ? R.string.backup_restored : R.string.backup_bad),
                         Toast.LENGTH_LONG).show();
                 if (ok) { FramesWidget.refreshData(this); buildUi(); }
