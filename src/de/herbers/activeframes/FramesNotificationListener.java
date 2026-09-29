@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 
+import de.herbers.common.Notifications;
+
 /** Faengt Benachrichtigungen ab, um (1) den roten Stern zu setzen ("etwas
  *  Neues") und (2) das letzte Bild je App fuer die Kachel zu merken - der
  *  einzige fuer Nicht-System-Apps erreichbare Weg zu "lebendigen" Kacheln:
@@ -55,7 +57,7 @@ public class FramesNotificationListener extends NotificationListenerService {
             if (img != null) ImageStore.putImage(this, pkg, img);
 
             // Roter Stern nur bei einer ECHTEN neuen Einzel-Benachrichtigung.
-            if (isReal(sbn)) {
+            if (Notifications.isReal(sbn)) {
                 ImageStore.markUnread(this, pkg);
                 ImageStore.clearDismissed(this, pkg); // wieder zeigen, es gibt Neues
             }
@@ -64,30 +66,15 @@ public class FramesNotificationListener extends NotificationListenerService {
         } catch (Throwable ignored) {}
     }
 
-    /** Eine „echte“, den Stern rechtfertigende Einzel-Benachrichtigung.
-     *  Ausgeschlossen (sonst falsche Sterne, z. B. beim Hub-Posteingang):
-     *  dauerhafte/nicht wegwischbare Meldungen (laufende Dienste), Gruppen-
-     *  Sammelmeldungen (FLAG_GROUP_SUMMARY) und Dienst-/Transport-/Fortschritts-/
-     *  System-Kategorien (Sync-Hinweise, Mediensteuerung, Downloads …). */
-    private static boolean isReal(StatusBarNotification sbn) {
-        Notification n = sbn.getNotification();
-        if (n == null) return false;
-        String cat = n.category;
-        boolean noise = Notification.CATEGORY_SERVICE.equals(cat)
-                || Notification.CATEGORY_TRANSPORT.equals(cat)
-                || Notification.CATEGORY_PROGRESS.equals(cat)
-                || Notification.CATEGORY_SYSTEM.equals(cat);
-        boolean summary = (n.flags & Notification.FLAG_GROUP_SUMMARY) != 0;
-        return sbn.isClearable() && !summary && !noise;
-    }
-
-    /** Gibt es für dieses Paket noch eine aktive, echte Benachrichtigung? */
+    /** Gibt es für dieses Paket noch eine aktive, echte Benachrichtigung?
+     *  „Echt" = de.herbers.common.Notifications.isReal (Kategorie-Rauschen,
+     *  Gruppen-Summary und nicht wegwischbare Meldungen ausgeschlossen). */
     private boolean hasRealNotification(String pkg) {
         try {
             StatusBarNotification[] active = getActiveNotifications();
             if (active == null) return false;
             for (StatusBarNotification s : active) {
-                if (s != null && pkg.equals(s.getPackageName()) && isReal(s)) return true;
+                if (s != null && pkg.equals(s.getPackageName()) && Notifications.isReal(s)) return true;
             }
         } catch (Throwable ignored) {}
         return false;

@@ -5,6 +5,12 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.26
+- Intern: Die Erkennung einer „echten" Benachrichtigung (für den roten Stern)
+  kommt jetzt aus dem gemeinsamen Kern der Bibliothek herbers-android-common
+  (de.herbers.common.Notifications.isReal) statt aus einer eigenen Kopie –
+  dieselbe, gepflegte Logik wie in EdgeTab und Sucher. Keine sichtbare Änderung.
+
 ## 0.25
 - Intern: Die Einstellungs-Sicherung nutzt jetzt die gemeinsame Bibliothek
   „herbers-android-common" (Git-Submodul, Klasse de.herbers.common.SettingsBackup)
