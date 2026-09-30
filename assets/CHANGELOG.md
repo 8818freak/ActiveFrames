@@ -5,11 +5,12 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
-## 0.28
-- Verbessert: Das Diagnose-Protokoll steht jetzt fest ganz unten, zeigt die
-  neuesten Einträge zuerst, und die Schaltflächen (Anzeigen-Schalter,
-  „löschen“) stehen darüber. Neuer Schalter „Protokoll anzeigen“ blendet es
-  bei Bedarf aus. (Einheitlich in allen Apps.)
+## 0.33
+- Verbessert: **Die Sicherung nimmt jetzt auch die Kachelbilder mit** (als
+  Zip: Einstellungen + Bilder). Nach dem Wiederherstellen sind die Kacheln
+  sofort wieder gefüllt, statt erst bei der nächsten Benachrichtigung
+  nachzuwachsen. Ältere reine Text-Sicherungen (nur Einstellungen) werden beim
+  Wiederherstellen weiterhin erkannt.
 
 ## 0.32
 - Behoben: Häkchen-Kästchen waren auf dunklem Grund kaum sichtbar (schwarzer
@@ -37,6 +38,25 @@ Benachrichtigung und rotem Stern bei Neuem.
   in die passende Systemeinstellung.
 - Intern: Die Bild-Erkennung aus Benachrichtigungen kommt jetzt aus der
   gemeinsamen Bibliothek (deckt auch das neuere Bild-Format ab Android 12 ab).
+
+## 0.28
+- Verbessert: Das Diagnose-Protokoll steht jetzt fest ganz unten, zeigt die
+  neuesten Einträge zuerst, und die Schaltflächen (Anzeigen-Schalter,
+  „löschen“) stehen darüber. Neuer Schalter „Protokoll anzeigen“ blendet es
+  bei Bedarf aus. (Einheitlich in allen Apps.)
+
+## 0.27
+- Neu: Diagnose-Protokoll mit Absturz-Erfassung (aus der gemeinsamen Bibliothek
+  herbers-android-common, de.herbers.common.DiagLog / Diagnostics) – unerwartete
+  Fehler werden mit vollem Stack festgehalten und lassen sich in der App unter
+  „Diagnose-Protokoll" einsehen/löschen, ohne Kabel. Dieselbe Diagnose wie in
+  EdgeTab und Sucher.
+
+## 0.26
+- Intern: Die Erkennung einer „echten" Benachrichtigung (für den roten Stern)
+  kommt jetzt aus dem gemeinsamen Kern der Bibliothek herbers-android-common
+  (de.herbers.common.Notifications.isReal) statt aus einer eigenen Kopie –
+  dieselbe, gepflegte Logik wie in EdgeTab und Sucher. Keine sichtbare Änderung.
 
 ## 0.25
 - Intern: Die Einstellungs-Sicherung nutzt jetzt die gemeinsame Bibliothek

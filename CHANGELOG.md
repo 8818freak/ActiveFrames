@@ -12,6 +12,39 @@ Benachrichtigung und rotem Stern bei Neuem.
   nachzuwachsen. Ältere reine Text-Sicherungen (nur Einstellungen) werden beim
   Wiederherstellen weiterhin erkannt.
 
+## 0.32
+- Behoben: Häkchen-Kästchen waren auf dunklem Grund kaum sichtbar (schwarzer
+  Rahmen); jetzt mit sichtbarem blauem Rahmen.
+
+## 0.31
+- Neu: Unter „Berechtigungen“ lassen sich die gespeicherten Kachelbilder
+  (aus Benachrichtigungen und Bildschirmfotos) gezielt löschen – mit
+  Sicherheitsabfrage. Die Kacheln bauen sich danach von selbst wieder auf.
+
+## 0.30
+- Aufgeräumt: Die Berechtigungen stehen jetzt NUR noch im aufklappbaren
+  Abschnitt „Berechtigungen“ – mit Erklärung, wofür jede gebraucht wird, und
+  einem Knopf in die passende Systemeinstellung. Die früheren separaten
+  Abschnitte (Reihenfolge/Stern/Fotos) entfallen (keine doppelten Einstellungen).
+- Behoben: Nach einem System-Update / „Cache leeren“ / SD Maid waren die
+  Kachelbilder weg. Sie liegen jetzt im persistenten App-Speicher (nicht mehr
+  im Cache) und überleben das. Vorhandene Bilder werden einmalig übernommen.
+- Neu: Erinnerung, wenn eine einmal erteilte Berechtigung fehlt (z. B. die
+  Bedienungshilfe für die Kachel-Fotos, die Android bei Updates gern entzieht).
+  Die Meldung führt direkt zum Wiedererteilen und lässt sich „Ignorieren“
+  (falls gewollt). Gemeinsame Funktion für alle Apps.
+- Neu: Aufklappbarer Abschnitt „Berechtigungen“ in den Einstellungen (Dreieck
+  ▸/▾) – zeigt alle Berechtigungen mit Status; ein Tipp führt je Berechtigung
+  in die passende Systemeinstellung.
+- Intern: Die Bild-Erkennung aus Benachrichtigungen kommt jetzt aus der
+  gemeinsamen Bibliothek (deckt auch das neuere Bild-Format ab Android 12 ab).
+
+## 0.28
+- Verbessert: Das Diagnose-Protokoll steht jetzt fest ganz unten, zeigt die
+  neuesten Einträge zuerst, und die Schaltflächen (Anzeigen-Schalter,
+  „löschen“) stehen darüber. Neuer Schalter „Protokoll anzeigen“ blendet es
+  bei Bedarf aus. (Einheitlich in allen Apps.)
+
 ## 0.27
 - Neu: Diagnose-Protokoll mit Absturz-Erfassung (aus der gemeinsamen Bibliothek
   herbers-android-common, de.herbers.common.DiagLog / Diagnostics) – unerwartete
