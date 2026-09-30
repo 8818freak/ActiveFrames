@@ -59,7 +59,8 @@ letzten Benachrichtigung, roter Stern bei Neuem.*
   only content provider — so EdgeTab needs no extra permissions, and because
   EdgeTab draws the tiles itself, that card scrolls reliably even on older
   launchers.
-- **Backup & restore** of all settings to a file (via the system file dialog).
+- **Backup & restore** of all settings **and the tile images** as a single Zip file
+  (via the system file dialog) – after restoring, the tiles are filled again right away.
 - No ads, no analytics, no billing, no internet permission.
 
 ## Scrolling note / Hinweis zum Scrollen
