@@ -5,6 +5,10 @@ eigenständige Nachbildung von BlackBerry OS10s „Active Frames": Kacheln der
 zuletzt benutzten Apps auf dem Startbildschirm, mit dem Inhalt der letzten
 Benachrichtigung und rotem Stern bei Neuem.
 
+## 0.33.1
+- Verbessert: Die Benachrichtigung bei einer fehlenden Berechtigung ist jetzt
+  zweisprachig (Deutsch/Englisch, folgt der Systemsprache).
+
 ## 0.33
 - Verbessert: **Die Sicherung nimmt jetzt auch die Kachelbilder mit** (als
   Zip: Einstellungen + Bilder). Nach dem Wiederherstellen sind die Kacheln

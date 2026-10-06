@@ -59,4 +59,10 @@
     <string name="backup_save_failed">Speichern fehlgeschlagen.</string>
     <string name="backup_restored">Einstellungen wiederhergestellt.</string>
     <string name="backup_bad">Ungültige oder beschädigte Sicherungsdatei.</string>
+    <string name="perm_reminder_channel">"Berechtigungs-Hinweise"</string>
+    <string name="perm_reminder_channel_desc">"Hinweis, wenn eine einmal erteilte Berechtigung fehlt."</string>
+    <string name="perm_reminder_title">"%1$s: Berechtigung fehlt"</string>
+    <string name="perm_reminder_text">"%1$s ist nicht mehr erteilt – tippen zum Erteilen."</string>
+    <string name="perm_reminder_bigtext">"%1$s war eingerichtet, ist aber nicht mehr erteilt (z. B. durch ein System-Update). Tippen, um sie wieder zu erteilen – oder „Ignorieren“, falls das gewollt ist."</string>
+    <string name="perm_reminder_ignore">"Ignorieren"</string>
 </resources>
